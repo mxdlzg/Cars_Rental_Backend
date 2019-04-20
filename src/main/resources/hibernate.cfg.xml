@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:mariadb://localhost:3306/rental</property>
+        <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
+        <mapping resource="com/mxdlzg/rental/domain/entity/RtUserEntity.hbm.xml"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtUserEntity"/>
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>
