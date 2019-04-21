@@ -1,5 +1,6 @@
 package com.mxdlzg.rental.controller.account;
 
+import com.mxdlzg.rental.dao.service.UserService;
 import com.mxdlzg.rental.domain.entity.RtUser;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.dao.respository.UserRepository;
@@ -14,18 +15,24 @@ import java.util.Map;
 @RestController
 public class AccountController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public RestResult register(@RequestBody Map<String,String> rUser){
         RtUser userBean = new RtUser();
         userBean.setUsername(rUser.getOrDefault("email",""));
-        userBean.setPassword(bCryptPasswordEncoder.encode(rUser.get("password")));
-        userBean.setRole("ROLE_USER");
-        userBean.setPhone(rUser.getOrDefault("mobile",""));
-        userBean = userRepository.save(userBean);
-        return new RestResult("ok","200","注册成功,ID:"+userBean.getId(),null);
+        RestResult restResult;
+        if (!userService.isExist(userBean.getUsername())){
+            userBean.setPassword(bCryptPasswordEncoder.encode(rUser.get("password")));
+            userBean.setRole(RtUser.ROLE_USER);
+            userBean.setPhone(rUser.getOrDefault("mobile",""));
+            userBean = userService.addNewUser(userBean);
+            restResult = new RestResult<String>("ok",200,"注册成功,ID:"+userBean.getId());
+        }else {
+            restResult = RestResult.fail("用户已存在");
+        }
+        return restResult;
     }
 }

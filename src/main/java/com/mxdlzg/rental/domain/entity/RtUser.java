@@ -15,6 +15,8 @@ public class RtUser extends BaseEntity{
     private Integer age;
     private String token;
     private String role;
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     public String getPhone() {
         return phone;

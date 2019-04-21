@@ -4,9 +4,9 @@ package com.mxdlzg.rental.domain.model;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class RestResult {
+public class RestResult<T> {
     // http 状态码
-    private String code;
+    private int code;
 
     // 返回信息
     private String msg;
@@ -19,7 +19,7 @@ public class RestResult {
     /**
      * 成功时返回的数据，失败时返回具体的异常信息
      */
-    private Object data;
+    private T data;
     /**
      * 请求失败返回的提示信息，给前端进行页面展示的信息
      */
@@ -29,18 +29,29 @@ public class RestResult {
      */
     private Timestamp currentTime;
 
-    public RestResult(String code, String msg, Object data) {
+    public RestResult(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public RestResult(String status, String code, Object data, Object errorMessage) {
+    public RestResult(String status, int code, T data, Object errorMessage) {
         this.status = status;
         this.code = code;
         this.data = data;
         this.errorMessage = errorMessage;
         this.currentTime = new Timestamp(new Date().getTime());
+    }
+
+    public RestResult(String status, int code, T data) {
+        this.code = code;
+        this.status = status;
+        this.data = data;
+    }
+
+
+    public static RestResult fail(String errorMessage){
+        return new RestResult<String>(400,errorMessage,null);
     }
 
     @Override
@@ -54,11 +65,11 @@ public class RestResult {
                 '}';
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -70,11 +81,11 @@ public class RestResult {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -101,4 +112,5 @@ public class RestResult {
     public void setCurrentTime(Timestamp currentTime) {
         this.currentTime = currentTime;
     }
+
 }

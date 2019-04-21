@@ -14,15 +14,17 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public RtUser savePerson(String name){
-        RtUser userBean = new RtUser();
-        userBean.setUsername(name);
-        return userRepository.save(userBean);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         RtUser userBean = userRepository.findByUsername(s);
         return new JwtUser(userBean);
+    }
+
+    public boolean isExist(String username) {
+        return userRepository.findByUsername(username)!=null;
+    }
+
+    public RtUser addNewUser(RtUser userBean) {
+        return userRepository.save(userBean);
     }
 }

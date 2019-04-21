@@ -8,6 +8,7 @@
         <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
         <mapping resource="com/mxdlzg/rental/domain/entity/RtUserEntity.hbm.xml"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtUserEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtCustomerEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
