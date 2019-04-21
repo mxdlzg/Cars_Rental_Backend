@@ -10,7 +10,9 @@ public class RestResult<T> {
     // 状态码
     private String code;
 
-    // 返回信息
+    /**
+     * 请求返回的提示信息，给前端进行页面展示的信息
+     */
     private String msg;
 
     private boolean success;
@@ -23,10 +25,7 @@ public class RestResult<T> {
      * 成功时返回的数据，失败时返回具体的异常信息
      */
     private T data;
-    /**
-     * 请求失败返回的提示信息，给前端进行页面展示的信息
-     */
-    private Object errorMessage;
+
     /**
      * 服务器当前时间（添加该字段的原因是便于查找定位请求时间，因为实际开发过程中服务器时间可能跟本地时间不一致，加上这个时间戳便于日后定位）
      */
@@ -39,25 +38,22 @@ public class RestResult<T> {
         super();
         this.success = success;
         this.data = data;
+        this.currentTime = new Timestamp(new Date().getTime());
     }
 
     public RestResult(String code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
-    }
-
-    public RestResult(String status, String code, T data, Object errorMessage) {
-        this.status = status;
-        this.code = code;
-        this.data = data;
-        this.errorMessage = errorMessage;
         this.currentTime = new Timestamp(new Date().getTime());
     }
+
 
     public RestResult(boolean success, String code, String msg) {
         this.success = success;
         this.code=  code;
+        this.msg = msg;
+        this.currentTime = new Timestamp(new Date().getTime());
     }
 
     public static RestResult<ResponseEnums> fail(ResponseEnums error){
@@ -70,7 +66,7 @@ public class RestResult<T> {
                 "status=" + status +
                 ", code='" + code + '\'' +
                 ", data=" + data +
-                ", errorMessage=" + errorMessage +
+                ", msg=" + msg +
                 ", currentTime=" + currentTime +
                 '}';
     }
@@ -105,14 +101,6 @@ public class RestResult<T> {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Object getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(Object errorMessage) {
-        this.errorMessage = errorMessage;
     }
 
     public Timestamp getCurrentTime() {
