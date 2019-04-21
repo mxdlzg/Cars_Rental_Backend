@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class RestResult<T> {
-    // http 状态码
-    private int code;
+    // 状态码
+    private String code;
 
     // 返回信息
     private String msg;
 
+    private boolean success;
     /**
      * 请求是否成功
      */
@@ -29,13 +30,22 @@ public class RestResult<T> {
      */
     private Timestamp currentTime;
 
-    public RestResult(int code, String msg, T data) {
+    public RestResult() {
+    }
+
+    public RestResult(boolean success, T data) {
+        super();
+        this.success = success;
+        this.data = data;
+    }
+
+    public RestResult(String code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public RestResult(String status, int code, T data, Object errorMessage) {
+    public RestResult(String status, String code, T data, Object errorMessage) {
         this.status = status;
         this.code = code;
         this.data = data;
@@ -43,15 +53,13 @@ public class RestResult<T> {
         this.currentTime = new Timestamp(new Date().getTime());
     }
 
-    public RestResult(String status, int code, T data) {
-        this.code = code;
-        this.status = status;
-        this.data = data;
+    public RestResult(boolean success, String code, String msg) {
+        this.success = success;
+        this.code=  code;
     }
 
-
     public static RestResult fail(String errorMessage){
-        return new RestResult<String>(400,errorMessage,null);
+        return new RestResult<String>("",errorMessage,null);
     }
 
     @Override
@@ -65,11 +73,11 @@ public class RestResult<T> {
                 '}';
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -113,4 +121,11 @@ public class RestResult<T> {
         this.currentTime = currentTime;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }
