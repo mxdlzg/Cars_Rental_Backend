@@ -15,6 +15,6 @@ import java.io.IOException;
 public class JWTAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        ServerletResponse.doResponse(httpServletResponse,HttpServletResponse.SC_FORBIDDEN, ResponseEnums.BAD_REQUEST,"error",false);
+        ServerletResponse.doResponse(httpServletResponse,HttpServletResponse.SC_FORBIDDEN, ResponseEnums.UNAUTHORIZED,"error",false);
     }
 }
