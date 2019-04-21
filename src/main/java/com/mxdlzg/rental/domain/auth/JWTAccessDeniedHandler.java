@@ -1,5 +1,7 @@
 package com.mxdlzg.rental.domain.auth;
 
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
+import com.mxdlzg.rental.utils.ServerletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,6 @@ import java.io.IOException;
 public class JWTAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN,e.getMessage());
+        ServerletResponse.doResponse(httpServletResponse,HttpServletResponse.SC_FORBIDDEN, ResponseEnums.BAD_REQUEST,"error",false);
     }
 }

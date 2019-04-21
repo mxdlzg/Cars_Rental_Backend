@@ -1,6 +1,8 @@
 package com.mxdlzg.rental.domain.auth;
 
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
+import com.mxdlzg.rental.utils.ServerletResponse;
 import com.mxdlzg.rental.utils.Translator;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -42,7 +44,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
             super.doFilterInternal(request, response, chain);
         }catch (JwtException e){
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Translator.toLocale("PLEASE_RELOGIN"));
+            ServerletResponse.doResponse(response,HttpServletResponse.SC_UNAUTHORIZED, ResponseEnums.UNAUTHORIZED,"error",false);
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Translator.toLocale("PLEASE_RELOGIN"));
         }
     }
 

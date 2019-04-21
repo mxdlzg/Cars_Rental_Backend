@@ -1,6 +1,8 @@
 package com.mxdlzg.rental.domain.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
+import com.mxdlzg.rental.utils.ServerletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -16,9 +18,7 @@ import java.io.IOException;
 public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        httpServletResponse.setCharacterEncoding("UTF-8");
-        httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN,e.getMessage());
+        ServerletResponse.doResponse(httpServletResponse, HttpServletResponse.SC_UNAUTHORIZED, ResponseEnums.UNAUTHORIZED, "error", false);
     }
 }
 

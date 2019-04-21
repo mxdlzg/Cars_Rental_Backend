@@ -31,7 +31,8 @@ public enum ResponseEnums {
     NOLOGIN("023","登录失败，账号或密码错误"),
     ILLEGAL_ARGUMENT("024","参数不合法"),
     ERROR_IDCODE("025","验证码不正确"),
-    VALID_USER("026","用户信息验证通过");
+    VALID_USER("026","用户信息验证通过"),
+    UNAUTHORIZED("027","未找到授权，请登录系统" );
 
     private String code;
     private String msg;
