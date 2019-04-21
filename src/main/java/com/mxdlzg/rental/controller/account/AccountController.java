@@ -29,7 +29,7 @@ public class AccountController {
             userBean.setRole(RtUser.ROLE_USER);
             userBean.setPhone(rUser.getOrDefault("mobile",""));
             userBean = userService.addNewUser(userBean);
-            restResult = new RestResult<String>("ok",200,"注册成功,ID:"+userBean.getId());
+            restResult = new RestResult<String>("ok","200","注册成功,ID:"+userBean.getId());
         }else {
             restResult = RestResult.fail("用户已存在");
         }
