@@ -34,10 +34,11 @@ public class RestResult<T> {
     public RestResult() {
     }
 
-    public RestResult(boolean success, T data) {
+    public RestResult(boolean success, ResponseEnums enums) {
         super();
         this.success = success;
-        this.data = data;
+        this.code = enums.getCode();
+        this.msg = enums.getMsg();
         this.currentTime = new Timestamp(new Date().getTime());
     }
 
