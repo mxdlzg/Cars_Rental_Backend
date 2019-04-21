@@ -6,10 +6,10 @@ import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.dao.respository.UserRepository;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class AccountController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/api/register")
-    public RestResult register(@RequestBody Map<String,String> rUser){
+    public ResponseEntity<RestResult> register(@RequestBody Map<String,String> rUser){
         RtUser userBean = new RtUser();
         userBean.setUsername(rUser.getOrDefault("email",""));
         RestResult restResult;
@@ -42,6 +42,14 @@ public class AccountController {
             //repeat register
             restResult = RestResult.fail(ResponseEnums.REPEAT_REGISTER);
         }
-        return restResult;
+        return new ResponseEntity<RestResult>(restResult, restResult.isSuccess()?HttpStatus.CREATED:HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/api/login/account")
+    public ResponseEntity<RestResult> login(@RequestBody Map<String,String> loginData){
+        RtUser user = new RtUser();
+        user.setUsername(loginData.get("username"));
+        return null;
+    }
+
 }

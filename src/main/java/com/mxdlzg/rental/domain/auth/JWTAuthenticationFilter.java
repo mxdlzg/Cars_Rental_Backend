@@ -3,7 +3,10 @@ package com.mxdlzg.rental.domain.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.domain.model.LoginUser;
+import com.mxdlzg.rental.domain.model.RestResult;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +29,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         // TODO: 2019/3/3 设置默认登录界面
-        super.setFilterProcessesUrl("/login");
+        super.setFilterProcessesUrl("/api/login/account");
     }
 
     @Override
@@ -63,12 +66,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 但是这里创建的token只是单纯的token
         // 按照jwt的规定，最后请求的格式应该是 `Bearer token`
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
+        doResponse(response,ResponseEnums.LOGIN_SUCCESS,"ok",true);
     }
 
     // 这是验证失败时候调用的方法
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse
             response, AuthenticationException failed) throws IOException, ServletException {
-        response.getWriter().write("authentication failed, reason: " + failed.getMessage());
+        doResponse(response,ResponseEnums.NOLOGIN,"error",false);
+    }
+
+    protected void doResponse(HttpServletResponse response,ResponseEnums enums,String status,boolean success) throws IOException{
+        RestResult<ResponseEnums> restResult = new RestResult<>(success,enums);
+        restResult.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(restResult.toString());
     }
 }

@@ -1,6 +1,7 @@
 package com.mxdlzg.rental.domain.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 
 import java.sql.Timestamp;
@@ -15,6 +16,7 @@ public class RestResult<T> {
      */
     private String msg;
 
+    @JsonIgnore
     private boolean success;
     /**
      * 请求是否成功
@@ -63,13 +65,12 @@ public class RestResult<T> {
 
     @Override
     public String toString() {
-        return "RestResult{" +
-                "status=" + status +
-                ", code='" + code + '\'' +
-                ", data=" + data +
-                ", msg=" + msg +
-                ", currentTime=" + currentTime +
-                '}';
+        return "{" +
+                "\"status\":\"" + status +
+                "\", \"code\":\"" + code + '\"' +
+                ", \"data\":" + data +
+                ", \"msg\":\"" + msg +
+                "\", \"currentTime\":\"" + currentTime +"\"}";
     }
 
     public String getCode() {

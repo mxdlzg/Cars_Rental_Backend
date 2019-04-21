@@ -28,7 +28,7 @@ public enum ResponseEnums {
     EDITPWD_SUCCESS("020","修改密码成功"),
     No_FileSELECT("021","未选择文件"),
     FILEUPLOAD_SUCCESS("022","上传成功"),
-    NOLOGIN("023","未登陆"),
+    NOLOGIN("023","登录失败，账号或密码错误"),
     ILLEGAL_ARGUMENT("024","参数不合法"),
     ERROR_IDCODE("025","验证码不正确"),
     VALID_USER("026","用户信息验证通过");
