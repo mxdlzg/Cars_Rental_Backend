@@ -1,6 +1,8 @@
 package com.mxdlzg.rental.domain.model;
 
 
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -58,8 +60,8 @@ public class RestResult<T> {
         this.code=  code;
     }
 
-    public static RestResult fail(String errorMessage){
-        return new RestResult<String>("",errorMessage,null);
+    public static RestResult<ResponseEnums> fail(ResponseEnums error){
+        return new RestResult<>(false,error);
     }
 
     @Override

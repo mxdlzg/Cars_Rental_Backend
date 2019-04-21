@@ -3,6 +3,7 @@ package com.mxdlzg.rental.dao.service;
 import com.mxdlzg.rental.domain.entity.RtUser;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.dao.respository.UserRepository;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,5 +27,9 @@ public class UserService implements UserDetailsService {
 
     public RtUser addNewUser(RtUser userBean) {
         return userRepository.save(userBean);
+    }
+
+    public ResponseEnums verify(RtUser userBean) {
+        return ResponseEnums.VALID_USER;
     }
 }

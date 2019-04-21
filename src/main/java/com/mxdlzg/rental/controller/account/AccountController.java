@@ -4,6 +4,7 @@ import com.mxdlzg.rental.dao.service.UserService;
 import com.mxdlzg.rental.domain.entity.RtUser;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.dao.respository.UserRepository;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +29,18 @@ public class AccountController {
             userBean.setPassword(bCryptPasswordEncoder.encode(rUser.get("password")));
             userBean.setRole(RtUser.ROLE_USER);
             userBean.setPhone(rUser.getOrDefault("mobile",""));
-            userBean = userService.addNewUser(userBean);
-            restResult = new RestResult<String>("ok","200","注册成功,ID:"+userBean.getId());
+            //Check user info
+            ResponseEnums state = userService.verify(userBean);
+            if (state == ResponseEnums.VALID_USER){
+                userBean = userService.addNewUser(userBean);
+                restResult = new RestResult<String>("ok",ResponseEnums.SUCCESS_OPTION.getMsg(),null);
+            }else {
+                //invalid
+                restResult = RestResult.fail(state);
+            }
         }else {
-            restResult = RestResult.fail("用户已存在");
+            //repeat register
+            restResult = RestResult.fail(ResponseEnums.REPEAT_REGISTER);
         }
         return restResult;
     }
