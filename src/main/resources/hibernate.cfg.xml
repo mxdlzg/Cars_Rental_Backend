@@ -9,6 +9,7 @@
         <mapping resource="com/mxdlzg/rental/domain/entity/RtUserEntity.hbm.xml"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtUserEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtCustomerEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtStoresEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
