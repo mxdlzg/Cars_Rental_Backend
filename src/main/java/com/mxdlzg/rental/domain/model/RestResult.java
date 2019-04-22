@@ -44,13 +44,29 @@ public class RestResult<T> {
         this.currentTime = new Timestamp(new Date().getTime());
     }
 
-    public RestResult(String code, String msg, T data) {
-        this.code = code;
-        this.msg = msg;
+    public RestResult(T data) {
+        this.status = "ok";
+        this.code = ResponseEnums.SUCCESS_OPTION.getCode();
+        this.msg = ResponseEnums.SUCCESS_OPTION.getMsg();
         this.data = data;
         this.currentTime = new Timestamp(new Date().getTime());
     }
 
+    public RestResult(ResponseEnums enums, T data) {
+        this.status = "ok";
+        this.code = enums.getCode();
+        this.msg = enums.getMsg();
+        this.data = data;
+        this.currentTime = new Timestamp(new Date().getTime());
+    }
+
+    public RestResult(ResponseEnums enums, T data,String status) {
+        this.status = status;
+        this.code = enums.getCode();
+        this.msg = enums.getMsg();
+        this.data = data;
+        this.currentTime = new Timestamp(new Date().getTime());
+    }
 
     public RestResult(boolean success, String code, String msg) {
         this.success = success;

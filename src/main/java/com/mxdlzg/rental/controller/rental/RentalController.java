@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,11 +19,10 @@ public class RentalController {
     StoreService storeService;
 
     @GetMapping("/stores")
-    public RestResult<ResponseEnums> queryStores(@RequestParam("1") String province,
+    public RestResult<?> queryStores(@RequestParam("1") String province,
                                                  @RequestParam("2") String area,
-                                                 @RequestParam("3") String city) {
-        RestResult<ResponseEnums> restResult;
-        Map<String,String> list = null;
-        return null;
+                                                 @RequestParam("3") int city) {
+        List<?> list = storeService.fetchStores(city);
+        return new RestResult<List<?>>(list);
     }
 }

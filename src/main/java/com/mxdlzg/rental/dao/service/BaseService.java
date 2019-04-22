@@ -12,7 +12,7 @@ public interface BaseService<T,ID extends Serializable,R extends BaseRepository<
     /**
      * 获取Repository
      */
-    R getRepository();
+    BaseRepository<T,ID> getRepository();
     T updateOne(ID id, T entity);
     T updateOne(T entity, T db);
     <TT,TID extends Serializable> TT updateOne(BaseRepository<TT, TID> baseRepository, TID id, TT entity);

@@ -17,13 +17,13 @@ public abstract class BaseServiceImpl <T,ID extends Serializable,R extends BaseR
     @PersistenceContext
     protected EntityManager em;
     @Autowired
-    protected R baseRepository;
+    protected BaseRepository<T,ID> baseRepository;
     @Override
     public T findOne(ID id) {
         return baseRepository.findById(id).orElse(null);
     }
     @Override
-    public R getRepository() {
+    public BaseRepository<T,ID> getRepository() {
         return baseRepository;
     }
     @Transactional

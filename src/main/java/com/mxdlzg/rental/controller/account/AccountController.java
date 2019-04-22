@@ -33,7 +33,7 @@ public class AccountController {
             ResponseEnums state = userService.verify(userBean);
             if (state == ResponseEnums.VALID_USER){
                 userBean = userService.addNewUser(userBean);
-                restResult = new RestResult<String>("ok",ResponseEnums.SUCCESS_OPTION.getMsg(),null);
+                restResult = new RestResult<String>(ResponseEnums.SUCCESS_OPTION,null);
             }else {
                 //invalid
                 restResult = RestResult.fail(state);
