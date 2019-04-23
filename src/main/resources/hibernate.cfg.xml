@@ -10,6 +10,8 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtUserEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtCustomerEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtStoresEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtCarMakerEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtCarStructureEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
