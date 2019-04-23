@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 
 import javax.persistence.Entity;
 
-@Entity
 public class OptionsCar {
     private String Key,Value,Type;
     private boolean Selected;

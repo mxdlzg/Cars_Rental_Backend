@@ -1,9 +1,12 @@
 package com.mxdlzg.rental.domain.model;
 
-public class OptionsKV {
-    private String Label,Value;
+import java.io.Serializable;
 
-    public OptionsKV(String label, String value) {
+public class OptionsKV<T> implements Serializable {
+    private String Label;
+    private T Value;
+
+    public OptionsKV(String label, T value) {
         Label = label;
         Value = value;
     }
@@ -16,11 +19,11 @@ public class OptionsKV {
         Label = label;
     }
 
-    public String getValue() {
+    public T getValue() {
         return Value;
     }
 
-    public void setValue(String value) {
+    public void setValue(T value) {
         Value = value;
     }
 }

@@ -26,7 +26,7 @@ public class RentalController {
     @GetMapping("/filter-conditions")
     public RestResult<?> queryFilter() {
         FilterParams filterParams = rentalService.queryFilter();
-        return null;
+        return new RestResult<>(filterParams);
     }
 
     @GetMapping("/stores")
