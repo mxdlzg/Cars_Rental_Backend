@@ -9,12 +9,12 @@ import java.util.Objects;
 public class RtCarEntity {
     private int id;
     private boolean bookAble;
-    private String buyDate;
+    private Timestamp buyDate;
     private String carcaseId;
     private double defaultRentPrice;
     private String engineId;
     private Integer insuranceId;
-    private String manufactureDate;
+    private Timestamp manufactureDate;
     private boolean rentAble;
     private Integer typeId;
     private String description;
@@ -24,6 +24,7 @@ public class RtCarEntity {
     private Integer storeId;
     private Integer capability;
     private Timestamp latestAvailableDate;
+    private Integer serviceTypeId;
 
     @Id
     @Column(name = "id")
@@ -47,11 +48,11 @@ public class RtCarEntity {
 
     @Basic
     @Column(name = "buy_date")
-    public String getBuyDate() {
+    public Timestamp getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(String buyDate) {
+    public void setBuyDate(Timestamp buyDate) {
         this.buyDate = buyDate;
     }
 
@@ -97,11 +98,11 @@ public class RtCarEntity {
 
     @Basic
     @Column(name = "manufacture_date")
-    public String getManufactureDate() {
+    public Timestamp getManufactureDate() {
         return manufactureDate;
     }
 
-    public void setManufactureDate(String manufactureDate) {
+    public void setManufactureDate(Timestamp manufactureDate) {
         this.manufactureDate = manufactureDate;
     }
 
@@ -222,5 +223,15 @@ public class RtCarEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, bookAble, buyDate, carcaseId, defaultRentPrice, engineId, insuranceId, manufactureDate, rentAble, typeId, description, brandName, fuelId, typeName, storeId, capability, latestAvailableDate);
+    }
+
+    @Basic
+    @Column(name = "service_type_id")
+    public Integer getServiceTypeId() {
+        return serviceTypeId;
+    }
+
+    public void setServiceTypeId(Integer serviceTypeId) {
+        this.serviceTypeId = serviceTypeId;
     }
 }

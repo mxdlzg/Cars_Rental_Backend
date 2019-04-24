@@ -4,6 +4,7 @@ import com.mxdlzg.rental.dao.respository.BaseRepository;
 import com.mxdlzg.rental.dao.respository.CarMakerRepository;
 import com.mxdlzg.rental.dao.respository.CarRepository;
 import com.mxdlzg.rental.dao.respository.CarStructureRepository;
+import com.mxdlzg.rental.domain.entity.RtCar;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
 import com.mxdlzg.rental.domain.entity.RtCarStructureEntity;
 import com.mxdlzg.rental.domain.model.FilterParams;
@@ -12,6 +13,9 @@ import com.mxdlzg.rental.domain.model.OptionsKV;
 import com.mxdlzg.rental.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -58,12 +62,18 @@ public class RentalService {
      * @param end end
      * @param d1 start date
      * @param d2 end date
+     * @param type
      * @return cars
      */
-    public List<RtCarEntity> findCars(int start, int end, Long d1, Long d2) {
+    public Page<RtCarEntity> findCars(int start, int end, Long d1, Long d2, int type) {
         Timestamp startDate = Converter.toTimestamp(d1);
         int days = Converter.diffDays(d1,d2);
+        return carRepository.findRtCarEntitiesAvailableMore(startDate,days,start,type,PageRequest.of(0,3));
+    }
 
-        return carRepository.findRtCarEntitiesAvailable(startDate,days,start);
+    public Page<RtCarEntity> findCarsMore(int start, int end, Long d1, Long d2,int type, int page) {
+        Timestamp startDate = Converter.toTimestamp(d1);
+        int days = Converter.diffDays(d1,d2);
+        return carRepository.findRtCarEntitiesAvailableMore(startDate,days,start,type,PageRequest.of(page,3));
     }
 }
