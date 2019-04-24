@@ -62,6 +62,8 @@ public class RentalService {
      */
     public List<RtCarEntity> findCars(int start, int end, Long d1, Long d2) {
         Timestamp startDate = Converter.toTimestamp(d1);
-        return carRepository.findRtCarEntitiesByLatestAvailableDateAfterAndStoreId(startDate,start);
+        int days = Converter.diffDays(d1,d2);
+
+        return carRepository.findRtCarEntitiesAvailable(startDate,days,start);
     }
 }
