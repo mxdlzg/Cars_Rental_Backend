@@ -1,9 +1,12 @@
 package com.mxdlzg.rental.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "rt_car", schema = "rental", catalog = "")
 public class RtCarEntity {

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StoreRepository extends BaseRepository<RtStoresEntity,Long> {
+public interface StoreRepository extends BaseRepository<RtStoresEntity,Integer> {
     public List<RtStoresEntity> findRtStoresEntitiesByAreaId(@Param("area_id")int areaID);
 }

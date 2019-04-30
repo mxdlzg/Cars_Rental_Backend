@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StoreService extends BaseServiceImpl<RtStoresEntity,Long, StoreRepository>{
+public class StoreService extends BaseServiceImpl<RtStoresEntity,Integer, StoreRepository>{
     @Autowired
     StoreRepository storeRepository;
 

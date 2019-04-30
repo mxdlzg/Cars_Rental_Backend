@@ -7,7 +7,7 @@ import java.util.Objects;
 @Table(name = "rt_stores", schema = "rental", catalog = "")
 public class RtStoresEntity {
     private int id;
-    private String location;
+    private String location = "";
     private String name;
     private Integer areaId;
 

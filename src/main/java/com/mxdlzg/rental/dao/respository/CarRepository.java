@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface CarRepository extends BaseRepository<RtCarEntity, Long> {
+public interface CarRepository extends BaseRepository<RtCarEntity, Integer> {
     List<RtCarEntity> findRtCarEntitiesByLatestAvailableDateAfterAndStoreId(Timestamp latestAvailableDate, int id);
 
     @Query(value = "select car from RtCarEntity car,RtBookingEntity book where car.storeId=:id and car.serviceTypeId=:type and " +

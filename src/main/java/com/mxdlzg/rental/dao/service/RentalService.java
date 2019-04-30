@@ -76,4 +76,8 @@ public class RentalService {
         int days = Converter.diffDays(d1,d2);
         return carRepository.findRtCarEntitiesAvailableMore(startDate,days,start,type,PageRequest.of(page,3));
     }
+
+    public RtCarEntity queryCarDetail(int id){
+        return carRepository.getOne(id);
+    }
 }
