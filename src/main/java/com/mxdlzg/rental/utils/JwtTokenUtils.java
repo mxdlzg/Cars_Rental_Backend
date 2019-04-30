@@ -32,6 +32,7 @@ public class JwtTokenUtils {
 
     // 从token中获取用户名
     public static String getUsername(String token) {
+        token = token.replace("Bearer ","");
         return getTokenBody(token).getSubject();
     }
 
@@ -41,6 +42,7 @@ public class JwtTokenUtils {
     }
 
     private static Claims getTokenBody(String token) {
+        token = token.replace("Bearer ","");
         return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 

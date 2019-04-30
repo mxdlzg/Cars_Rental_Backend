@@ -6,6 +6,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "rt_user", schema = "rental", catalog = "")
 public class RtUserEntity {
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
     private int id;
     private Integer age;
     private String password;
@@ -14,9 +16,10 @@ public class RtUserEntity {
     private String token;
     private String username;
     private String role;
+    private Integer integral;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -26,7 +29,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "age")
+    @Column(name = "age", nullable = true)
     public Integer getAge() {
         return age;
     }
@@ -36,7 +39,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = true, length = 255)
     public String getPassword() {
         return password;
     }
@@ -46,7 +49,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = true, length = 255)
     public String getPhone() {
         return phone;
     }
@@ -56,7 +59,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "sex")
+    @Column(name = "sex", nullable = true)
     public Integer getSex() {
         return sex;
     }
@@ -66,7 +69,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "token")
+    @Column(name = "token", nullable = true, length = 255)
     public String getToken() {
         return token;
     }
@@ -76,7 +79,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "username")
+    @Column(name = "username", nullable = true, length = 255)
     public String getUsername() {
         return username;
     }
@@ -86,7 +89,7 @@ public class RtUserEntity {
     }
 
     @Basic
-    @Column(name = "role")
+    @Column(name = "role", nullable = true, length = 255)
     public String getRole() {
         return role;
     }
@@ -113,5 +116,15 @@ public class RtUserEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, age, password, phone, sex, token, username, role);
+    }
+
+    @Basic
+    @Column(name = "integral", nullable = true)
+    public Integer getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(Integer integral) {
+        this.integral = integral;
     }
 }

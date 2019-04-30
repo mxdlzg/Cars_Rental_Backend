@@ -3,12 +3,13 @@ package com.mxdlzg.rental.controller.order;
 import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
-import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.OrderPriceDetail;
+import com.mxdlzg.rental.domain.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
+import java.util.Map;
 
 @RestController
 public class OrderController {
@@ -32,5 +33,12 @@ public class OrderController {
         OrderPriceDetail detail = orderService.queryOrderDetail(carId,startDate,endDate,start,end);
 
         return new RestResult<>(detail);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/api/order/submitOrder")
+    public RestResult<?> submitOrder(@RequestHeader("Authorization") String token, @RequestBody Map<String,Object> map){
+        orderService.submitOrder(token,map);
+        return new RestResult<>(null);
     }
 }

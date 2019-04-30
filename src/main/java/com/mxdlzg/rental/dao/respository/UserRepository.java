@@ -1,9 +1,9 @@
 package com.mxdlzg.rental.dao.respository;
 
-import com.mxdlzg.rental.domain.entity.RtUser;
+import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<RtUser,Long> {
-    RtUser findUserBeanById(Integer id);
-    RtUser findByUsername(String name);
+public interface UserRepository extends CrudRepository<RtUserEntity,Long> {
+    RtUserEntity findUserBeanById(Integer id);
+    RtUserEntity findByUsername(String name);
 }

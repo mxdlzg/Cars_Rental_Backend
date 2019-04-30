@@ -1,6 +1,6 @@
 package com.mxdlzg.rental.dao.service;
 
-import com.mxdlzg.rental.domain.entity.RtUser;
+import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.dao.respository.UserRepository;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
@@ -17,7 +17,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        RtUser userBean = userRepository.findByUsername(s);
+        RtUserEntity userBean = userRepository.findByUsername(s);
         return new JwtUser(userBean);
     }
 
@@ -25,11 +25,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)!=null;
     }
 
-    public RtUser addNewUser(RtUser userBean) {
+    public RtUserEntity addNewUser(RtUserEntity userBean) {
         return userRepository.save(userBean);
     }
 
-    public ResponseEnums verify(RtUser userBean) {
+    public ResponseEnums verify(RtUserEntity userBean) {
         return ResponseEnums.VALID_USER;
     }
 }

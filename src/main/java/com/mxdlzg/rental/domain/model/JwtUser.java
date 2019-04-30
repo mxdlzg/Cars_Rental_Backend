@@ -1,6 +1,6 @@
 package com.mxdlzg.rental.domain.model;
 
-import com.mxdlzg.rental.domain.entity.RtUser;
+import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,7 @@ public class JwtUser implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public JwtUser(RtUser userBean) {
+    public JwtUser(RtUserEntity userBean) {
         id = userBean.getId();
         username = userBean.getUsername();
         password = userBean.getPassword();

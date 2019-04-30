@@ -1,9 +1,8 @@
 package com.mxdlzg.rental.controller.account;
 
 import com.mxdlzg.rental.dao.service.UserService;
-import com.mxdlzg.rental.domain.entity.RtUser;
+import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.RestResult;
-import com.mxdlzg.rental.dao.respository.UserRepository;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +21,12 @@ public class AccountController {
 
     @PostMapping("/api/register")
     public ResponseEntity<RestResult> register(@RequestBody Map<String,String> rUser){
-        RtUser userBean = new RtUser();
+        RtUserEntity userBean = new RtUserEntity();
         userBean.setUsername(rUser.getOrDefault("email",""));
         RestResult restResult;
         if (!userService.isExist(userBean.getUsername())){
             userBean.setPassword(bCryptPasswordEncoder.encode(rUser.get("password")));
-            userBean.setRole(RtUser.ROLE_USER);
+            userBean.setRole(RtUserEntity.ROLE_USER);
             userBean.setPhone(rUser.getOrDefault("mobile",""));
             //Check user info
             ResponseEnums state = userService.verify(userBean);
@@ -47,7 +46,7 @@ public class AccountController {
 
     @PostMapping("/api/login/account")
     public ResponseEntity<RestResult> login(@RequestBody Map<String,String> loginData){
-        RtUser user = new RtUser();
+        RtUserEntity user = new RtUserEntity();
         user.setUsername(loginData.get("username"));
         return null;
     }
