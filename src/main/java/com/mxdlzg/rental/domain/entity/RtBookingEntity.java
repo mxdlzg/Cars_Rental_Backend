@@ -16,9 +16,11 @@ public class RtBookingEntity {
     private Integer carId;
     private BigDecimal bookingPrice;
     private Integer nextSpaceDays;
+    private Integer preId;
+    private Integer nextId;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -28,7 +30,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "belong_user_id")
+    @Column(name = "belong_user_id", nullable = true)
     public Integer getBelongUserId() {
         return belongUserId;
     }
@@ -38,7 +40,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "rent_days")
+    @Column(name = "rent_days", nullable = true)
     public Integer getRentDays() {
         return rentDays;
     }
@@ -48,7 +50,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = true)
     public Timestamp getStartDate() {
         return startDate;
     }
@@ -58,7 +60,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = true)
     public Timestamp getEndDate() {
         return endDate;
     }
@@ -68,7 +70,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "car_id")
+    @Column(name = "car_id", nullable = true)
     public Integer getCarId() {
         return carId;
     }
@@ -78,7 +80,7 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "booking_price")
+    @Column(name = "booking_price", nullable = true, precision = 2)
     public BigDecimal getBookingPrice() {
         return bookingPrice;
     }
@@ -107,12 +109,32 @@ public class RtBookingEntity {
     }
 
     @Basic
-    @Column(name = "next_space_days")
+    @Column(name = "next_space_days", nullable = true)
     public Integer getNextSpaceDays() {
         return nextSpaceDays;
     }
 
     public void setNextSpaceDays(Integer nextSpaceDays) {
         this.nextSpaceDays = nextSpaceDays;
+    }
+
+    @Basic
+    @Column(name = "pre_id", nullable = true)
+    public Integer getPreId() {
+        return preId;
+    }
+
+    public void setPreId(Integer preId) {
+        this.preId = preId;
+    }
+
+    @Basic
+    @Column(name = "next_id", nullable = true)
+    public Integer getNextId() {
+        return nextId;
+    }
+
+    public void setNextId(Integer nextId) {
+        this.nextId = nextId;
     }
 }

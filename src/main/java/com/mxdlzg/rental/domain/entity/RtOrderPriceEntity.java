@@ -12,6 +12,7 @@ public class RtOrderPriceEntity {
     private Double amount;
     private Integer orderId;
     private Timestamp date;
+    private Integer priceId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -78,5 +79,15 @@ public class RtOrderPriceEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, num, amount, orderId, date);
+    }
+
+    @Basic
+    @Column(name = "price_id", nullable = true)
+    public Integer getPriceId() {
+        return priceId;
+    }
+
+    public void setPriceId(Integer priceId) {
+        this.priceId = priceId;
     }
 }

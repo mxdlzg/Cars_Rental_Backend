@@ -6,6 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "rt_customer", schema = "rental", catalog = "")
+@IdClass(RtCustomerEntityPK.class)
 public class RtCustomerEntity {
     private int id;
     private String name;
@@ -18,10 +19,8 @@ public class RtCustomerEntity {
     private Timestamp driverLicenseGetDate;
     private Timestamp driverLicenseEndDate;
     private String email;
-
     public RtCustomerEntity() {
     }
-
     public RtCustomerEntity(String name, String cardId, String mobile, String email) {
         this.name = name;
         this.cardId = cardId;
@@ -31,6 +30,7 @@ public class RtCustomerEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -39,8 +39,8 @@ public class RtCustomerEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name", nullable = true, length = 255)
+    @Id
+    @Column(name = "name", nullable = false, length = 30)
     public String getName() {
         return name;
     }
@@ -50,7 +50,7 @@ public class RtCustomerEntity {
     }
 
     @Basic
-    @Column(name = "sex", nullable = false)
+    @Column(name = "sex", nullable = true)
     public boolean isSex() {
         return sex;
     }
@@ -75,17 +75,17 @@ public class RtCustomerEntity {
     }
 
     @Basic
-    @Column(name = "credit_level", nullable = false)
-    public int getCreditLevel() {
+    @Column(name = "credit_level", nullable = true)
+    public Integer getCreditLevel() {
         return creditLevel;
     }
 
-    public void setCreditLevel(int creditLevel) {
+    public void setCreditLevel(Integer creditLevel) {
         this.creditLevel = creditLevel;
     }
 
     @Basic
-    @Column(name = "driver_license_id", nullable = false, length = 255)
+    @Column(name = "driver_license_id", nullable = true, length = 255)
     public String getDriverLicenseId() {
         return driverLicenseId;
     }
@@ -94,8 +94,8 @@ public class RtCustomerEntity {
         this.driverLicenseId = driverLicenseId;
     }
 
-    @Basic
-    @Column(name = "card_id", nullable = false, length = 255)
+    @Id
+    @Column(name = "card_id", nullable = false, length = 30)
     public String getCardId() {
         return cardId;
     }
@@ -105,7 +105,7 @@ public class RtCustomerEntity {
     }
 
     @Basic
-    @Column(name = "mobile", nullable = true, length = 20)
+    @Column(name = "mobile", nullable = false, length = 20)
     public String getMobile() {
         return mobile;
     }
@@ -145,7 +145,7 @@ public class RtCustomerEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = true, length = 255)
+    @Column(name = "email", nullable = false, length = 255)
     public String getEmail() {
         return email;
     }

@@ -18,9 +18,9 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderCouponsEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderCustomerEntity"/>
-        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderPriceEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderStateEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderTypeEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderPriceEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

@@ -5,14 +5,19 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "rt_order_state", schema = "rental", catalog = "")
+@Table(name = "rt_order_state", schema = "rental")
 public class RtOrderStateEntity {
     private int id;
     private Integer orderId;
     private Integer stateId;
-    private String stateName;
     private Timestamp changedDate;
     private String handler;
+
+    public RtOrderStateEntity(Integer orderId, Integer stateId, String handler) {
+        this.orderId = orderId;
+        this.stateId = stateId;
+        this.handler = handler;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -45,16 +50,6 @@ public class RtOrderStateEntity {
     }
 
     @Basic
-    @Column(name = "state_name", nullable = true, length = 255)
-    public String getStateName() {
-        return stateName;
-    }
-
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    @Basic
     @Column(name = "changed_date", nullable = true)
     public Timestamp getChangedDate() {
         return changedDate;
@@ -82,13 +77,12 @@ public class RtOrderStateEntity {
         return id == that.id &&
                 Objects.equals(orderId, that.orderId) &&
                 Objects.equals(stateId, that.stateId) &&
-                Objects.equals(stateName, that.stateName) &&
                 Objects.equals(changedDate, that.changedDate) &&
                 Objects.equals(handler, that.handler);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderId, stateId, stateName, changedDate, handler);
+        return Objects.hash(id, orderId, stateId, changedDate, handler);
     }
 }

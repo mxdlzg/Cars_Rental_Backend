@@ -4,11 +4,17 @@ import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
 import com.mxdlzg.rental.domain.model.OrderPriceDetail;
+import com.mxdlzg.rental.domain.model.OrderSubmitForm;
+import com.mxdlzg.rental.domain.model.OrderSubmitResult;
 import com.mxdlzg.rental.domain.model.RestResult;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -37,8 +43,19 @@ public class OrderController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/api/order/submitOrder")
-    public RestResult<?> submitOrder(@RequestHeader("Authorization") String token, @RequestBody Map<String,Object> map){
-        orderService.submitOrder(token,map);
-        return new RestResult<>(null);
+    public RestResult<OrderSubmitResult> submitOrder(@RequestHeader("Authorization") String token,
+                                                     @Validated
+                                                     @RequestBody OrderSubmitForm form,
+                                                     BindingResult validatorResult ){
+
+        if (!validatorResult.hasErrors()){
+            OrderSubmitResult result = orderService.submitOrder(token,form);
+            if (result!=null){
+                RestResult<OrderSubmitResult> response = new RestResult<>(result);
+            }
+        }else {
+            return new RestResult<>(false, ResponseEnums.PARAMS_ERROR);
+        }
+        return new RestResult<>(false, ResponseEnums.DATABASE_ERROR);
     }
 }
