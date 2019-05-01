@@ -1,18 +1,22 @@
 package com.mxdlzg.rental.domain.model;
 
-import com.mxdlzg.rental.domain.entity.RtPriceEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mxdlzg.rental.domain.entity.RtOrderPriceEntity;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 public class OrderPriceDetail {
-    private List<RtPriceEntity> detail;
+    private List<RtOrderPriceEntity> detail;
     private String amount;
     private Timestamp fetchCarDate,returnCarDate;
     private String fetchLocation,returnLocation;
+    @JsonIgnore
+    private float total;
 
-    public OrderPriceDetail(List<RtPriceEntity> detail, float price, Timestamp fetchCarDate, Timestamp returnCarDate, String fetchLocation, String returnLocation) {
+    public OrderPriceDetail(List<RtOrderPriceEntity> detail, float price, Timestamp fetchCarDate, Timestamp returnCarDate, String fetchLocation, String returnLocation) {
         this.detail = detail;
+        this.total = price;
         this.amount = convertPrice(price);
         this.fetchCarDate = fetchCarDate;
         this.returnCarDate = returnCarDate;
@@ -20,11 +24,11 @@ public class OrderPriceDetail {
         this.returnLocation = returnLocation;
     }
 
-    public List<RtPriceEntity> getDetail() {
+    public List<RtOrderPriceEntity> getDetail() {
         return detail;
     }
 
-    public void setDetail(List<RtPriceEntity> detail) {
+    public void setDetail(List<RtOrderPriceEntity> detail) {
         this.detail = detail;
     }
 
@@ -71,4 +75,9 @@ public class OrderPriceDetail {
     private String convertPrice(float price){
         return "￥"+String.valueOf(price);
     }
+
+    public float getTotal() {
+        return total;
+    }
+
 }

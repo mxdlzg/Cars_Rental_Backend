@@ -15,6 +15,12 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtCarEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtBookingEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtPriceEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderCouponsEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderCustomerEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderPriceEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderStateEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderTypeEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
