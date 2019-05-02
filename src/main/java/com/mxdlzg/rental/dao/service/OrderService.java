@@ -2,6 +2,7 @@ package com.mxdlzg.rental.dao.service;
 
 import com.mxdlzg.rental.dao.respository.*;
 import com.mxdlzg.rental.domain.entity.*;
+import com.mxdlzg.rental.domain.model.OrderPayInfo;
 import com.mxdlzg.rental.domain.model.OrderPriceDetail;
 import com.mxdlzg.rental.domain.model.OrderSubmitForm;
 import com.mxdlzg.rental.domain.model.OrderSubmitResult;
@@ -40,6 +41,10 @@ public class OrderService {
     OrderPriceRepository orderPriceRepository;
     @Autowired
     OrderStateRepository orderStateRepository;
+
+    //view
+    @Autowired
+    OrderPayInfoRepo orderPayInfoRepo;
 
     public OrderPriceDetail queryOrderDetail(int carId, Long startDate, Long endDate, int start, int end) {
         //定价条目
@@ -171,5 +176,10 @@ public class OrderService {
             orderSubmitResult = new OrderSubmitResult(ResponseEnums.DATABASE_ERROR);
         }
         return orderSubmitResult;
+    }
+
+    public OrderPayInfo getOrderPayInfo(Integer id){
+        RtvOrderPayInfoEntity infoEntity = orderPayInfoRepo.getOne(id);
+        return OrderPayInfo.valueOf(infoEntity);
     }
 }

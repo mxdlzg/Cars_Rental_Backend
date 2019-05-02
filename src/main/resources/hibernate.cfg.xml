@@ -21,6 +21,7 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderStateEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderTypeEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderPriceEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvOrderPayInfoEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
