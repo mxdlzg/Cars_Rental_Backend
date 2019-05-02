@@ -10,6 +10,8 @@ import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.Converter;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,8 @@ public class OrderService {
     OrderPriceRepository orderPriceRepository;
     @Autowired
     OrderStateRepository orderStateRepository;
+    @Autowired
+    OrderCarInfoRepo orderCarInfoRepo;
 
     //view
     @Autowired
@@ -181,5 +185,10 @@ public class OrderService {
     public OrderPayInfo getOrderPayInfo(Integer id){
         RtvOrderPayInfoEntity infoEntity = orderPayInfoRepo.getOne(id);
         return OrderPayInfo.valueOf(infoEntity);
+    }
+
+    public Page<RtvOrderCarInfoEntity> queryOrderList(String name,int page) {
+        RtUserEntity userEntity = userRepository.findByUsername(name);
+        return orderCarInfoRepo.findAllByBelongUserId(userEntity.getId(), PageRequest.of(page,10));
     }
 }

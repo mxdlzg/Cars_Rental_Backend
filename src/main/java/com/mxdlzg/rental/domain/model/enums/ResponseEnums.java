@@ -32,6 +32,7 @@ public enum ResponseEnums {
     ILLEGAL_ARGUMENT("024","参数不合法"),
     ERROR_IDCODE("025","验证码不正确"),
     VALID_USER("026","用户信息验证通过"),
+    INVALID_USER("030","用户信息验证失败，非法用户"),
     UNAUTHORIZED("027","未找到授权，或当前账号无权限进行此操作" ),
     PARAMS_ERROR("028","参数错误"),
     RESOURCE_UNAVAILABLE("029","资源不可用");

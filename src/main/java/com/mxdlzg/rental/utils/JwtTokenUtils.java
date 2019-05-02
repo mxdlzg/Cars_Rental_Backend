@@ -49,4 +49,9 @@ public class JwtTokenUtils {
     public static String getUserRole(String token) {
         return getTokenBody(token).get(ROLE_CLAIMS).toString();
     }
+
+    public static boolean isValidUser(String name,String token){
+        String serverSideName = JwtTokenUtils.getUsername(token);
+        return serverSideName.equals(name);
+    }
 }
