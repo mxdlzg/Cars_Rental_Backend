@@ -8,6 +8,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "rt_booking", schema = "rental", catalog = "")
 public class RtBookingEntity {
+    @Id
+    @GeneratedValue
     private int id;
     private Integer belongUserId;
     private Integer rentDays;
@@ -21,6 +23,7 @@ public class RtBookingEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }

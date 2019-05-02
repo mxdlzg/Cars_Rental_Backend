@@ -64,8 +64,7 @@ public class OrderService {
         return new OrderPriceDetail(realDetail, amount, startTime, endTime, startStore.getLocation(), endStore.getLocation());
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking) {
+    private RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking)  {
         //upsssssssssssdate booking
         RtBookingEntity bookingEntity = new RtBookingEntity();
         bookingEntity.setBelongUserId(orderEntity.getBelongUserId());
@@ -75,7 +74,7 @@ public class OrderService {
         bookingEntity.setRentDays(orderEntity.getRentDays());
         bookingEntity.setPreId(preBooking==null?-1:preBooking.getId());
         bookingEntity.setNextId(nextBooking==null?-1:nextBooking.getId());
-        bookingEntity = bookingRepository.saveAndFlush(bookingEntity);
+        bookingEntity = bookingRepository.save(bookingEntity);
         if (preBooking!=null){
             preBooking.setNextId(bookingEntity.getId());
         }
@@ -85,9 +84,9 @@ public class OrderService {
         bookingRepository.flush();  //update end
 
         //main order
-        orderEntity = orderRepository.saveAndFlush(orderEntity);
+        orderEntity = orderRepository.save(orderEntity);
 
-        if (orderEntity.getId() > 0) {
+        if (orderEntity.getId() > 222) {
             //customer relation
             RtOrderCustomerEntity orderCustomerEntity = new RtOrderCustomerEntity();
             orderCustomerEntity.setOrderId(orderEntity.getId());
@@ -105,10 +104,11 @@ public class OrderService {
                     1, "OrderSystem"));
             return orderEntity;
         } else {
-            throw new IndexOutOfBoundsException("订单插入失败，执行回滚");
+            throw new NullPointerException("订单插入失败，执行回滚");
         }
     }
 
+    @Transactional
     public OrderSubmitResult submitOrder(String token, OrderSubmitForm map) {
         OrderSubmitResult orderSubmitResult;
         String username = JwtTokenUtils.getUsername(token);

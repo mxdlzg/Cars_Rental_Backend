@@ -39,6 +39,7 @@ public class RtOrderEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }
