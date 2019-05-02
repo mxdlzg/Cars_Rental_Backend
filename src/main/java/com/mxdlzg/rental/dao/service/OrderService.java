@@ -9,14 +9,14 @@ import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.Converter;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OrderService {
@@ -34,9 +34,12 @@ public class OrderService {
     BookingRepository bookingRepository;
     @Autowired
     OrderRepository orderRepository;
-    BaseRepository<RtOrderCustomerEntity, Integer> orderCustomerEntityRepository;
-    BaseRepository<RtOrderPriceEntity, Integer> orderPriceEntityIntegerBaseRepository;
-    BaseRepository<RtOrderStateEntity, Integer> orderStateEntityIntegerBaseRepository;
+    @Autowired
+    OrderCustomerRepository orderCustomerRepository;
+    @Autowired
+    OrderPriceRepository orderPriceRepository;
+    @Autowired
+    OrderStateRepository orderStateRepository;
 
     public OrderPriceDetail queryOrderDetail(int carId, Long startDate, Long endDate, int start, int end) {
         //定价条目
@@ -74,37 +77,41 @@ public class OrderService {
         bookingEntity.setRentDays(orderEntity.getRentDays());
         bookingEntity.setPreId(preBooking==null?-1:preBooking.getId());
         bookingEntity.setNextId(nextBooking==null?-1:nextBooking.getId());
-        bookingEntity = bookingRepository.save(bookingEntity);
         if (preBooking!=null){
             preBooking.setNextId(bookingEntity.getId());
+            int preMidDays = Converter.diffDays(preBooking.getEndDate().getTime()*1000,bookingEntity.getStartDate().getTime()*1000);
+            preBooking.setNextSpaceDays(preBooking.getNextSpaceDays()-preMidDays);
         }
         if (nextBooking!=null){
             nextBooking.setPreId(bookingEntity.getId());
+            int midNextDays = Converter.diffDays(bookingEntity.getEndDate().getTime()*1000,nextBooking.getStartDate().getTime()*1000);
+            bookingEntity.setNextSpaceDays(midNextDays);
         }
+        bookingEntity = bookingRepository.save(bookingEntity);
         bookingRepository.flush();  //update end
 
         //main order
         orderEntity = orderRepository.save(orderEntity);
 
-        if (orderEntity.getId() > 222) {
+        if (orderEntity.getId() > 0) {
             //customer relation
             RtOrderCustomerEntity orderCustomerEntity = new RtOrderCustomerEntity();
             orderCustomerEntity.setOrderId(orderEntity.getId());
             orderCustomerEntity.setCustomerId(customerEntity.getId());
-            orderCustomerEntityRepository.save(orderCustomerEntity);
+            orderCustomerRepository.save(orderCustomerEntity);
 
             //price item relation
             for (RtOrderPriceEntity orderPriceEntity : priceDetail.getDetail()) {
                 orderPriceEntity.setOrderId(orderEntity.getId());
             }
-            List<RtOrderPriceEntity> list = orderPriceEntityIntegerBaseRepository.saveAll(priceDetail.getDetail());
+            List<RtOrderPriceEntity> list = orderPriceRepository.saveAll(priceDetail.getDetail());
 
             //state relation
-            orderStateEntityIntegerBaseRepository.save(new RtOrderStateEntity(orderEntity.getId(),
+            orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),
                     1, "OrderSystem"));
             return orderEntity;
         } else {
-            throw new NullPointerException("订单插入失败，执行回滚");
+            throw new IndexOutOfBoundsException("订单插入失败，执行回滚");
         }
     }
 
@@ -143,15 +150,18 @@ public class OrderService {
         //customer
         RtCustomerEntity customerEntity = new RtCustomerEntity(map.getName(), map.getCardId(), map.getPhone(), map.getEmail());
         if (!customerRepository.existsByCardId(customerEntity.getCardId())) {
-            customerEntity = customerRepository.saveAndFlush(customerEntity);
+            customerEntity = customerRepository.save(customerEntity);
+        }else {
+            customerEntity = customerRepository.findByCardId(customerEntity.getCardId());
         }
 
-        //re calc price
+        //re calc price(service)
         OrderPriceDetail priceDetail = queryOrderDetail(carId, startDate, endDate, start, end);
 
         //create order
         RtOrderEntity orderEntity = new RtOrderEntity(userEntity.getId(), priceDetail.getTotal(), days,
                 priceDetail.getFetchCarDate(), priceDetail.getReturnCarDate(), carId, 1, true);
+        orderEntity.setCreatedDate(new Timestamp(new Date().getTime()));
 
         //if car rent able
         RtOrderEntity submitOrderEntity = submit(priceDetail, orderEntity, customerEntity,preBooking,nextBooking);

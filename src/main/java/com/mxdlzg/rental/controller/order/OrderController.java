@@ -51,7 +51,7 @@ public class OrderController {
         if (!validatorResult.hasErrors()){
             OrderSubmitResult result = orderService.submitOrder(token,form);
             if (result!=null){
-                RestResult<OrderSubmitResult> response = new RestResult<>(result);
+                return new RestResult<>(result);
             }
         }else {
             return new RestResult<>(false, ResponseEnums.PARAMS_ERROR);
