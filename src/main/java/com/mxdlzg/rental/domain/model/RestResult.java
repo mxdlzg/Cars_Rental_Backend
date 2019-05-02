@@ -16,7 +16,6 @@ public class RestResult<T> {
      */
     private String msg;
 
-    @JsonIgnore
     private boolean success;
     /**
      * 请求是否成功
@@ -39,6 +38,7 @@ public class RestResult<T> {
     public RestResult(boolean success, ResponseEnums enums) {
         super();
         this.success = success;
+        this.status = "error";
         this.code = enums.getCode();
         this.msg = enums.getMsg();
         this.currentTime = new Timestamp(new Date().getTime());

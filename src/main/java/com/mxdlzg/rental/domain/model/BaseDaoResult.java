@@ -21,4 +21,12 @@ public class BaseDaoResult {
         this.enums = enums;
         this.success = success;
     }
+
+    public ResponseEnums getEnums() {
+        return enums;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
 }

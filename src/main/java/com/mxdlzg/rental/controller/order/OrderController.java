@@ -50,12 +50,13 @@ public class OrderController {
 
         if (!validatorResult.hasErrors()){
             OrderSubmitResult result = orderService.submitOrder(token,form);
-            if (result!=null){
+            if (result.isSuccess()){
                 return new RestResult<>(result);
+            }else {
+                return new RestResult<>(false,result.getEnums());
             }
         }else {
             return new RestResult<>(false, ResponseEnums.PARAMS_ERROR);
         }
-        return new RestResult<>(false, ResponseEnums.DATABASE_ERROR);
     }
 }

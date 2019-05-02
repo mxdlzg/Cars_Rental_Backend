@@ -17,9 +17,10 @@ public class RtBookingEntity {
     private Timestamp endDate;
     private Integer carId;
     private BigDecimal bookingPrice;
-    private Integer nextSpaceDays;
+    private Integer nextSpaceDays = 1000;
     private Integer preId;
     private Integer nextId;
+    private Integer statusId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -139,5 +140,15 @@ public class RtBookingEntity {
 
     public void setNextId(Integer nextId) {
         this.nextId = nextId;
+    }
+
+    @Basic
+    @Column(name = "status_id", nullable = true)
+    public Integer getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
     }
 }
