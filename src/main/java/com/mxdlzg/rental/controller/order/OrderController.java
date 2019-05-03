@@ -79,4 +79,12 @@ public class OrderController {
         }
         return restResult;
     }
+
+    @GetMapping("/api/order/orderDetail")
+    public RestResult<?> orderDetail(@RequestHeader("Authorization") String token,
+                                     @RequestParam("id") int name){
+
+
+        return null;
+    }
 }

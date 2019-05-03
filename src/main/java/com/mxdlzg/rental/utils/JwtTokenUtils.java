@@ -1,5 +1,6 @@
 package com.mxdlzg.rental.utils;
 
+import com.mxdlzg.rental.domain.model.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,23 +18,24 @@ public class JwtTokenUtils {
 
     private static final String ROLE_CLAIMS = "rol";
 
-    public static String createToken(String username,String role, boolean isRememberMe) {
+    public static String createToken(JwtUser user, String role, boolean isRememberMe) {
         long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
         HashMap<String ,Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS,role);
+        map.put("id",user.getId());
         return Jwts.builder().signWith(SignatureAlgorithm.HS256, SECRET)
                 .setClaims(map)
                 .setIssuer(ISS)
-                .setSubject(username)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .compact();
     }
 
-    // 从token中获取用户名
-    public static String getUsername(String token) {
+
+    private static Claims getTokenBody(String token) {
         token = token.replace("Bearer ","");
-        return getTokenBody(token).getSubject();
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 
     // 是否已过期
@@ -41,13 +43,18 @@ public class JwtTokenUtils {
         return getTokenBody(token).getExpiration().before(new Date());
     }
 
-    private static Claims getTokenBody(String token) {
-        token = token.replace("Bearer ","");
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+
+    // 从token中获取用户名
+    public static String getUsername(String token) {
+        return getTokenBody(token).getSubject();
     }
 
     public static String getUserRole(String token) {
         return getTokenBody(token).get(ROLE_CLAIMS).toString();
+    }
+
+    public static int getUserId(String token){
+        return Integer.valueOf(getTokenBody(token).get("id").toString());
     }
 
     public static boolean isValidUser(String name,String token){

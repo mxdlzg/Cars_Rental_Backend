@@ -17,10 +17,11 @@ public class RtvOrderCarInfoEntity {
     private String typeName;
     private String brandName;
     private Integer belongUserId;
+    private String imageSrc;
+    private Integer passengerNum;
 
-    @Basic
     @Id
-    @Column(name = "carId", nullable = false)
+    @Column(name = "car_id", nullable = false)
     public int getCarId() {
         return carId;
     }
@@ -90,7 +91,7 @@ public class RtvOrderCarInfoEntity {
     }
 
     @Basic
-    @Column(name = "orderId", nullable = false)
+    @Column(name = "order_id", nullable = false)
     public int getOrderId() {
         return orderId;
     }
@@ -149,5 +150,25 @@ public class RtvOrderCarInfoEntity {
 
     public void setBelongUserId(Integer belongUserId) {
         this.belongUserId = belongUserId;
+    }
+
+    @Basic
+    @Column(name = "image_src", nullable = true, length = 255)
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    @Basic
+    @Column(name = "passenger_num", nullable = true)
+    public Integer getPassengerNum() {
+        return passengerNum;
+    }
+
+    public void setPassengerNum(Integer passengerNum) {
+        this.passengerNum = passengerNum;
     }
 }

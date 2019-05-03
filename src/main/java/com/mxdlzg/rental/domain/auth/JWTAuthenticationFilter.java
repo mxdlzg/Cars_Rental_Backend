@@ -61,7 +61,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         for (GrantedAuthority authority : authorities) {
             role = authority.getAuthority();
         } // 根据用户名，角色创建token
-        String token = JwtTokenUtils.createToken(jwtUser.getUsername(), role, isRemember);
+        String token = JwtTokenUtils.createToken(jwtUser, role, isRemember);
 
         // 返回创建成功的token
         // 但是这里创建的token只是单纯的token

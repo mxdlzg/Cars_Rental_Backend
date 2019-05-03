@@ -23,6 +23,7 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtOrderPriceEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvOrderPayInfoEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvOrderCarInfoEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvUserCouponsEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
