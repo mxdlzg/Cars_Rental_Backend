@@ -4,23 +4,15 @@ import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
 import com.mxdlzg.rental.domain.entity.RtvOrderCarInfoEntity;
-import com.mxdlzg.rental.domain.model.OrderPriceDetail;
-import com.mxdlzg.rental.domain.model.OrderSubmitForm;
-import com.mxdlzg.rental.domain.model.OrderSubmitResult;
-import com.mxdlzg.rental.domain.model.RestResult;
+import com.mxdlzg.rental.domain.model.*;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class OrderController {
@@ -41,7 +33,7 @@ public class OrderController {
                                                    @RequestParam("endDate") long endDate,
                                                    @RequestParam("start") int start,
                                                    @RequestParam("end") int end) {
-        OrderPriceDetail detail = orderService.queryOrderDetail(carId, startDate, endDate, start, end);
+        OrderPriceDetail detail = orderService.queryOrderRentDetail(carId, startDate, endDate, start, end);
 
         return new RestResult<>(detail);
     }
@@ -71,20 +63,26 @@ public class OrderController {
                                    @RequestParam("page") int page) {
         RestResult<?> restResult = null;
 
-        if (JwtTokenUtils.isValidUser(name,token)){
-            Page<RtvOrderCarInfoEntity> list = orderService.queryOrderList(name,page);
+        if (JwtTokenUtils.isValidUser(name, token)) {
+            Page<RtvOrderCarInfoEntity> list = orderService.queryOrderList(name, page);
             restResult = new RestResult<>(list);
-        }else {
-            restResult = new RestResult<>(false,ResponseEnums.INVALID_USER);
+        } else {
+            restResult = new RestResult<>(false, ResponseEnums.INVALID_USER);
         }
         return restResult;
     }
 
     @GetMapping("/api/order/orderDetail")
     public RestResult<?> orderDetail(@RequestHeader("Authorization") String token,
-                                     @RequestParam("id") int name){
-
-
-        return null;
+                                     @RequestParam("id") int id) {
+        int userId = JwtTokenUtils.getUserId(token);
+        RestResult<OrderDetail> restResult = null;
+        OrderDetail orderDetail = orderService.queryOrderDetail(userId, id);
+        if (orderDetail.isSuccess()) {
+            restResult = new RestResult<>(orderDetail);
+        } else {
+            restResult = new RestResult<>(false,orderDetail.getEnums());
+        }
+        return restResult;
     }
 }

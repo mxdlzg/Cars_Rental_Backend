@@ -2,10 +2,7 @@ package com.mxdlzg.rental.dao.service;
 
 import com.mxdlzg.rental.dao.respository.*;
 import com.mxdlzg.rental.domain.entity.*;
-import com.mxdlzg.rental.domain.model.OrderPayInfo;
-import com.mxdlzg.rental.domain.model.OrderPriceDetail;
-import com.mxdlzg.rental.domain.model.OrderSubmitForm;
-import com.mxdlzg.rental.domain.model.OrderSubmitResult;
+import com.mxdlzg.rental.domain.model.*;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.utils.Converter;
 import com.mxdlzg.rental.utils.JwtTokenUtils;
@@ -15,9 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,14 +40,16 @@ public class OrderService {
     OrderPriceRepository orderPriceRepository;
     @Autowired
     OrderStateRepository orderStateRepository;
-    @Autowired
-    OrderCarInfoRepo orderCarInfoRepo;
 
     //view
     @Autowired
     OrderPayInfoRepo orderPayInfoRepo;
+    @Autowired
+    OrderCarInfoRepo orderCarInfoRepo;
+    @Autowired
+    StateCurrentRepo stateCurrentRepo;
 
-    public OrderPriceDetail queryOrderDetail(int carId, Long startDate, Long endDate, int start, int end) {
+    public OrderPriceDetail queryOrderRentDetail(int carId, Long startDate, Long endDate, int start, int end) {
         //定价条目
         List<RtPriceEntity> detail = priceRepository.findAllByCarId(carId);
         List<RtOrderPriceEntity> realDetail = new ArrayList<>();
@@ -76,7 +75,7 @@ public class OrderService {
         return new OrderPriceDetail(realDetail, amount, startTime, endTime, startStore.getLocation(), endStore.getLocation());
     }
 
-    private RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking)  {
+    private RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking) {
         //upsssssssssssdate booking
         RtBookingEntity bookingEntity = new RtBookingEntity();
         bookingEntity.setBelongUserId(orderEntity.getBelongUserId());
@@ -84,16 +83,16 @@ public class OrderService {
         bookingEntity.setStartDate(orderEntity.getStartDate());
         bookingEntity.setEndDate(orderEntity.getEndDate());
         bookingEntity.setRentDays(orderEntity.getRentDays());
-        bookingEntity.setPreId(preBooking==null?-1:preBooking.getId());
-        bookingEntity.setNextId(nextBooking==null?-1:nextBooking.getId());
-        if (preBooking!=null){
+        bookingEntity.setPreId(preBooking == null ? -1 : preBooking.getId());
+        bookingEntity.setNextId(nextBooking == null ? -1 : nextBooking.getId());
+        if (preBooking != null) {
             preBooking.setNextId(bookingEntity.getId());
-            int preMidDays = Converter.diffDays(preBooking.getEndDate().getTime()*1000,bookingEntity.getStartDate().getTime()*1000);
-            preBooking.setNextSpaceDays(preBooking.getNextSpaceDays()-preMidDays);
+            int preMidDays = Converter.diffDays(preBooking.getEndDate().getTime() * 1000, bookingEntity.getStartDate().getTime() * 1000);
+            preBooking.setNextSpaceDays(preBooking.getNextSpaceDays() - preMidDays);
         }
-        if (nextBooking!=null){
+        if (nextBooking != null) {
             nextBooking.setPreId(bookingEntity.getId());
-            int midNextDays = Converter.diffDays(bookingEntity.getEndDate().getTime()*1000,nextBooking.getStartDate().getTime()*1000);
+            int midNextDays = Converter.diffDays(bookingEntity.getEndDate().getTime() * 1000, nextBooking.getStartDate().getTime() * 1000);
             bookingEntity.setNextSpaceDays(midNextDays);
         }
         bookingEntity = bookingRepository.save(bookingEntity);
@@ -145,13 +144,13 @@ public class OrderService {
         List<RtBookingEntity> list = null;
         RtBookingEntity preBooking = null;
         RtBookingEntity nextBooking = null;
-        if (bookingExist){
-            list = carRepository.isRentAble(map.getCarId(),startTime,days);
-            if (list.size()<=0){
+        if (bookingExist) {
+            list = carRepository.isRentAble(map.getCarId(), startTime, days);
+            if (list.size() <= 0) {
                 return new OrderSubmitResult(ResponseEnums.RESOURCE_UNAVAILABLE);
             }
             preBooking = list.get(0);
-            if (preBooking.getNextId()!=-1){
+            if (preBooking.getNextId() != -1) {
                 nextBooking = bookingRepository.getOne(preBooking.getNextId());
             }
         }
@@ -160,20 +159,23 @@ public class OrderService {
         RtCustomerEntity customerEntity = new RtCustomerEntity(map.getName(), map.getCardId(), map.getPhone(), map.getEmail());
         if (!customerRepository.existsByCardId(customerEntity.getCardId())) {
             customerEntity = customerRepository.save(customerEntity);
-        }else {
+        } else {
             customerEntity = customerRepository.findByCardId(customerEntity.getCardId());
         }
 
         //re calc price(service)
-        OrderPriceDetail priceDetail = queryOrderDetail(carId, startDate, endDate, start, end);
+        OrderPriceDetail priceDetail = queryOrderRentDetail(carId, startDate, endDate, start, end);
 
-        //create order
+        //create order( default state =-----> 1<ORDER_STATE_ORDERED>)
         RtOrderEntity orderEntity = new RtOrderEntity(userEntity.getId(), priceDetail.getTotal(), days,
                 priceDetail.getFetchCarDate(), priceDetail.getReturnCarDate(), carId, 1, true);
         orderEntity.setCreatedDate(new Timestamp(new Date().getTime()));
+        orderEntity.setStartStoreId(map.getStart());
+        orderEntity.setEndStoreId(map.getEnd());
+
 
         //if car rent able
-        RtOrderEntity submitOrderEntity = submit(priceDetail, orderEntity, customerEntity,preBooking,nextBooking);
+        RtOrderEntity submitOrderEntity = submit(priceDetail, orderEntity, customerEntity, preBooking, nextBooking);
         if (submitOrderEntity != null) {
             orderSubmitResult = new OrderSubmitResult(submitOrderEntity.getId(), submitOrderEntity.getCreatedDate());
         } else {
@@ -182,13 +184,46 @@ public class OrderService {
         return orderSubmitResult;
     }
 
-    public OrderPayInfo getOrderPayInfo(Integer id){
+    public OrderPayInfo getOrderPayInfo(Integer id) {
         RtvOrderPayInfoEntity infoEntity = orderPayInfoRepo.getOne(id);
         return OrderPayInfo.valueOf(infoEntity);
     }
 
-    public Page<RtvOrderCarInfoEntity> queryOrderList(String name,int page) {
+    public Page<RtvOrderCarInfoEntity> queryOrderList(String name, int page) {
         RtUserEntity userEntity = userRepository.findByUsername(name);
-        return orderCarInfoRepo.findAllByBelongUserId(userEntity.getId(), PageRequest.of(page,10));
+        return orderCarInfoRepo.findAllByBelongUserId(userEntity.getId(), PageRequest.of(page, 10));
+    }
+
+
+    /**
+     * query order detail
+     *
+     * @param userId user id
+     * @param id     order id
+     * @return order
+     */
+    public OrderDetail queryOrderDetail(int userId, int id) {
+        OrderDetail orderDetail = null;
+        RtOrderEntity orderEntity = orderRepository.findByBelongUserIdAndId(userId, id);
+        if (orderEntity != null) {
+            RtvStateCurrentEntity currentEntity = stateCurrentRepo.findByOrderIdAndStateId(orderEntity.getId(), orderEntity.getCurrentStateId());
+            //new result
+            orderDetail = new OrderDetail(currentEntity.getCurrent(),currentEntity.getChangedDate());
+            //user info
+            List<RtCustomerEntity> customerEntityList = customerRepository.findAllByOrderId(orderEntity.getId());
+            orderDetail.setUserInfo(customerEntityList);
+            //location
+            List<RtStoresEntity> stores = storeRepository.findAllById(Arrays.asList(orderEntity.getStartStoreId(),orderEntity.getEndStoreId()));
+            RtStoresEntity start = stores.get(0);
+            orderDetail.setStartLocation(start.getId(),start.getName(),start.getLocation(),"",orderEntity.getStartDate());
+            if (!orderEntity.getStartStoreId().equals(orderEntity.getEndStoreId())){
+                RtStoresEntity end = stores.get(1);
+                orderDetail.setEndLocation(end.getId(),end.getName(),end.getLocation(),"",orderEntity.getEndDate());
+            }else {
+                //same with start
+                orderDetail.setEndLocation();
+            }
+        }
+        return orderDetail;
     }
 }

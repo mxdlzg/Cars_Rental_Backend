@@ -10,7 +10,7 @@ import java.util.Objects;
 public class RtOrderEntity {
     private int id;
     private Integer belongUserId;
-    private float totalPrice;
+    private double totalPrice;
     private Integer rentDays;
     private Timestamp startDate;
     private Timestamp endDate;
@@ -22,6 +22,9 @@ public class RtOrderEntity {
     private Boolean isValid;
     private String description;
     private Timestamp payDate;
+    private Integer currentStateId;
+    private Integer startStoreId;
+    private Integer endStoreId;
 
     public RtOrderEntity() {
     }
@@ -35,6 +38,7 @@ public class RtOrderEntity {
         this.carId = carId;
         this.type = type;
         this.isValid = isValid;
+        this.currentStateId = 1;
     }
 
     @Id
@@ -60,11 +64,11 @@ public class RtOrderEntity {
 
     @Basic
     @Column(name = "total_price", nullable = true, precision = 2)
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(float totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -202,5 +206,35 @@ public class RtOrderEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, belongUserId, totalPrice, rentDays, startDate, endDate, carId, servicePrice, vehiclePrice, type, createdDate, isValid, description, payDate);
+    }
+
+    @Basic
+    @Column(name = "current_state_id", nullable = true)
+    public Integer getCurrentStateId() {
+        return currentStateId;
+    }
+
+    public void setCurrentStateId(Integer currentStateId) {
+        this.currentStateId = currentStateId;
+    }
+
+    @Basic
+    @Column(name = "start_store_id", nullable = true)
+    public Integer getStartStoreId() {
+        return startStoreId;
+    }
+
+    public void setStartStoreId(Integer startStoreId) {
+        this.startStoreId = startStoreId;
+    }
+
+    @Basic
+    @Column(name = "end_store_id", nullable = true)
+    public Integer getEndStoreId() {
+        return endStoreId;
+    }
+
+    public void setEndStoreId(Integer endStoreId) {
+        this.endStoreId = endStoreId;
     }
 }
