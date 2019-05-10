@@ -2,12 +2,18 @@ package com.mxdlzg.rental.controller.account;
 
 import com.mxdlzg.rental.dao.service.UserService;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
+import com.mxdlzg.rental.domain.model.JwtUser;
+import com.mxdlzg.rental.domain.model.LoginResult;
+import com.mxdlzg.rental.domain.model.OrderSubmitForm;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
+import com.mxdlzg.rental.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -45,10 +51,19 @@ public class AccountController {
     }
 
     @PostMapping("/api/login/account")
-    public ResponseEntity<RestResult> login(@RequestBody Map<String,String> loginData){
-        RtUserEntity user = new RtUserEntity();
-        user.setUsername(loginData.get("username"));
+    public RestResult<LoginResult> login(
+            @Validated
+            @RequestBody JwtUser user,
+            BindingResult validatorResult){
+
+
         return null;
+    }
+
+    @GetMapping("/api/currentUser")
+    public RestResult<RtUserEntity> queryUser(@RequestHeader("Authorization") String token){
+        int userId = JwtTokenUtils.getUserId(token);
+        return new RestResult<>(userService.queryUserProfile(userId));
     }
 
 }

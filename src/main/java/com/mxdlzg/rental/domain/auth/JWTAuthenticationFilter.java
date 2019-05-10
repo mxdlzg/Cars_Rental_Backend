@@ -2,6 +2,7 @@ package com.mxdlzg.rental.domain.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxdlzg.rental.domain.model.JwtUser;
+import com.mxdlzg.rental.domain.model.LoginResult;
 import com.mxdlzg.rental.domain.model.LoginUser;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
@@ -26,6 +27,7 @@ import java.util.Collection;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private ThreadLocal<Integer> rememberMe = new ThreadLocal<>();
+    private ThreadLocal<String> loginData = new ThreadLocal<>();
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -39,6 +41,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             LoginUser loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
             rememberMe.set(loginUser.getRememberMe());
+            loginData.set(loginUser.getType());
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,14 +70,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 但是这里创建的token只是单纯的token
         // 按照jwt的规定，最后请求的格式应该是 `Bearer token`
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
-        ServerletResponse.doResponse(response,ResponseEnums.LOGIN_SUCCESS,"ok",true);
+        LoginResult loginResult = new LoginResult(loginData.get(),role);
+        ServerletResponse.doResponse(response,ResponseEnums.LOGIN_SUCCESS,loginResult,"ok",true);
     }
 
     // 这是验证失败时候调用的方法
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse
             response, AuthenticationException failed) throws IOException, ServletException {
-        ServerletResponse.doResponse(response,ResponseEnums.NOLOGIN,"error",false);
+        ServerletResponse.doResponse(response,ResponseEnums.NOLOGIN,new LoginResult(loginData.get(),"ROLE_GUEST"),"error",false);
     }
 
 }

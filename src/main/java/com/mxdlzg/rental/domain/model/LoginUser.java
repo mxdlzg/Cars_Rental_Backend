@@ -4,6 +4,12 @@ public class LoginUser {
     private String username;
     private String password;
     private Integer rememberMe;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
 
     public String getUsername() {
         return username;
@@ -22,9 +28,9 @@ public class LoginUser {
     }
 
     public Integer getRememberMe() {
-        if (rememberMe == null){
+        if (rememberMe == null) {
             return 0;
-        }else {
+        } else {
             return rememberMe;
         }
     }

@@ -3,6 +3,7 @@ package com.mxdlzg.rental.dao.service;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.dao.respository.UserRepository;
+import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,5 +32,9 @@ public class UserService implements UserDetailsService {
 
     public ResponseEnums verify(RtUserEntity userBean) {
         return ResponseEnums.VALID_USER;
+    }
+
+    public RtUserEntity queryUserProfile(int userId) {
+        return userRepository.findUserBeanById(userId);
     }
 }

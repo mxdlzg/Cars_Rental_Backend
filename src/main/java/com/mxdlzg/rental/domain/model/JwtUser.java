@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -12,6 +14,7 @@ public class JwtUser implements UserDetails {
     private Integer id;
     private String username;
     private String password;
+    private String currentAuthority;
     private Collection<? extends GrantedAuthority> authorities;
 
 
