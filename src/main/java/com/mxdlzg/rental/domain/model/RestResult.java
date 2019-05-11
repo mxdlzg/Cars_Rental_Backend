@@ -46,6 +46,7 @@ public class RestResult<T> {
 
     public RestResult(T data) {
         this.status = "ok";
+        this.success = true;
         this.code = ResponseEnums.SUCCESS_OPTION.getCode();
         this.msg = ResponseEnums.SUCCESS_OPTION.getMsg();
         this.data = data;

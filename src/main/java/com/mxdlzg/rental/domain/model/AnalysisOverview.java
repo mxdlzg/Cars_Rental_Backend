@@ -1,9 +1,16 @@
 package com.mxdlzg.rental.domain.model;
 
+import com.mxdlzg.rental.domain.entity.RtvAnalysisDayAccessEntity;
+import com.mxdlzg.rental.domain.entity.RtvAnalysisDaySaleEntity;
+
+import java.util.List;
+
 public class AnalysisOverview {
     private double totalSale,todaySale;
     private long totalAccess,todayAccess;
     private long totalPaidCount,todayPaidCount;
+    private List<RtvAnalysisDayAccessEntity> accessDetailList;
+    private List<RtvAnalysisDaySaleEntity> paidDetailList;
 
     public AnalysisOverview(double totalSale, double todaySale, int totalAccess, int todayAccess, int totalPaidCount, int todayPaidCount) {
         this.totalSale = totalSale;
@@ -65,5 +72,25 @@ public class AnalysisOverview {
 
     public void setTodayPaidCount(long todayPaidCount) {
         this.todayPaidCount = todayPaidCount;
+    }
+
+    public void setAccessDetailList(List<RtvAnalysisDayAccessEntity> accessDetailList) {
+        this.accessDetailList = accessDetailList;
+    }
+
+    public void setPaidDetailList(List<RtvAnalysisDaySaleEntity> paidDetailList) {
+        this.paidDetailList = paidDetailList;
+    }
+
+    public long getTotalPaidCount() {
+        return totalPaidCount;
+    }
+
+    public List<RtvAnalysisDayAccessEntity> getAccessDetailList() {
+        return accessDetailList;
+    }
+
+    public List<RtvAnalysisDaySaleEntity> getPaidDetailList() {
+        return paidDetailList;
     }
 }
