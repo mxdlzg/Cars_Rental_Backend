@@ -19,4 +19,7 @@ public interface OrderCarInfoRepo extends BaseRepository<RtvOrderCarInfoEntity,I
 
     @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.storeName,sum (r.totalPrice)) from RtvOrderCarInfoEntity r where r.createdDate>=YEAR(NOW()) group by r.startStoreId")
     List<OptionsKV<Double>> statisticDetailRankingYear();
+
+    @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.brandName,count(r)) from RtvOrderCarInfoEntity r group by r.brandName order by count(r) desc")
+    List<OptionsKV<Long>> querySalesType();
 }

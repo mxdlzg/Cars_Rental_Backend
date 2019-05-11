@@ -71,4 +71,10 @@ public class AnalysisService {
 
         return new SalesCard(sales,storesRanking);
     }
+
+    public List<OptionsKV<Long>> querySalesType() {
+        return orderCarInfoRepo.querySalesType();
+    }
 }
+
+
