@@ -44,15 +44,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             SecurityContextHolder.getContext().setAuthentication(getAuthentication(tokenHeader));
             super.doFilterInternal(request, response, chain);
         }catch (JwtException e){
-            ServerletResponse.doResponse(response,HttpServletResponse.SC_UNAUTHORIZED, ResponseEnums.UNAUTHORIZED,"error",false);
+            ServerletResponse.doResponse(response,HttpServletResponse.SC_UNAUTHORIZED, ResponseEnums.LOGIN_INVALID_OR_EXPIRED,"error",false);
 //            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Translator.toLocale("PLEASE_RELOGIN"));
         }
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String tokenHeader) {
-        String token = tokenHeader.replace(JwtTokenUtils.TOKEN_PREFIX, "");
-        String username = JwtTokenUtils.getUsername(token);
-        String role = JwtTokenUtils.getUserRole(token);
+        String username = JwtTokenUtils.getUsername(tokenHeader);
+        String role = JwtTokenUtils.getUserRole(tokenHeader);
         if (username != null) {
             return new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(role)));
         }

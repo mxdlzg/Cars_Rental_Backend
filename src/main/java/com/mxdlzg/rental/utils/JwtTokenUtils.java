@@ -34,7 +34,7 @@ public class JwtTokenUtils {
 
 
     private static Claims getTokenBody(String token) {
-        token = token.replace("Bearer ","");
+        token = token.replace(TOKEN_PREFIX,"");
         return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 

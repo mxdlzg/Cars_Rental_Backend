@@ -1,5 +1,7 @@
 package com.mxdlzg.rental.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,6 +12,7 @@ public class RtUserEntity {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     private int id;
     private Integer age;
+    @JsonIgnore
     private String password;
     private String phone;
     private Integer sex;

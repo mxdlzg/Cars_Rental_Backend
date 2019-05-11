@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.io.Serializable;
 import java.util.List;
 
-public interface BaseService<T,ID extends Serializable,R extends BaseRepository<T,ID>> {
+public interface BaseService<T,ID extends Serializable> {
     /**
      * 获取Repository
      */

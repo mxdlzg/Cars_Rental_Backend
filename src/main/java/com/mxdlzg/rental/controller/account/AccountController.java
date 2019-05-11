@@ -1,5 +1,6 @@
 package com.mxdlzg.rental.controller.account;
 
+import com.mxdlzg.rental.controller.BaseController;
 import com.mxdlzg.rental.dao.service.UserService;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-public class AccountController {
+public class AccountController extends BaseController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -62,6 +63,7 @@ public class AccountController {
 
     @GetMapping("/api/currentUser")
     public RestResult<RtUserEntity> queryUser(@RequestHeader("Authorization") String token){
+        doBury();
         int userId = JwtTokenUtils.getUserId(token);
         return new RestResult<>(userService.queryUserProfile(userId));
     }

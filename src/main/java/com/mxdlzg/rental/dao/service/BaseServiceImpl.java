@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class BaseServiceImpl <T,ID extends Serializable,R extends BaseRepository<T,ID>> implements BaseService<T,ID,R>{
+public abstract class BaseServiceImpl <T,ID extends Serializable> implements BaseService<T,ID>{
     @PersistenceContext
     protected EntityManager em;
     @Autowired
