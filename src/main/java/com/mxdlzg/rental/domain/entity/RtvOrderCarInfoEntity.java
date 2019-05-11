@@ -1,6 +1,7 @@
 package com.mxdlzg.rental.domain.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +20,11 @@ public class RtvOrderCarInfoEntity {
     private Integer belongUserId;
     private String imageSrc;
     private Integer passengerNum;
+    private Timestamp createdDate;
+    private String storeName;
+    private Integer startStoreId;
 
+    @Basic
     @Id
     @Column(name = "car_id", nullable = false)
     public int getCarId() {
@@ -170,5 +175,35 @@ public class RtvOrderCarInfoEntity {
 
     public void setPassengerNum(Integer passengerNum) {
         this.passengerNum = passengerNum;
+    }
+
+    @Basic
+    @Column(name = "created_date", nullable = true)
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @Basic
+    @Column(name = "store_name", nullable = true, length = 255)
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    @Basic
+    @Column(name = "start_store_id", nullable = true)
+    public Integer getStartStoreId() {
+        return startStoreId;
+    }
+
+    public void setStartStoreId(Integer startStoreId) {
+        this.startStoreId = startStoreId;
     }
 }

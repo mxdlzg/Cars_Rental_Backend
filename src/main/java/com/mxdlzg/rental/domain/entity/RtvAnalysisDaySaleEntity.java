@@ -9,6 +9,9 @@ public class RtvAnalysisDaySaleEntity {
     private Double dayTotal;
     private long dayPaidCount;
     private String dayTime;
+    private Integer dayOfWeek;
+    private Integer dayOfMonth;
+    private Integer monthOfYear;
 
     @Basic
     @Column(name = "day_total", nullable = true, precision = 2)
@@ -30,6 +33,7 @@ public class RtvAnalysisDaySaleEntity {
         this.dayPaidCount = dayPaidCount;
     }
 
+    @Basic
     @Id
     @Column(name = "day_time", nullable = true, length = 10)
     public String getDayTime() {
@@ -53,5 +57,35 @@ public class RtvAnalysisDaySaleEntity {
     @Override
     public int hashCode() {
         return Objects.hash(dayTotal, dayPaidCount, dayTime);
+    }
+
+    @Basic
+    @Column(name = "day_of_week", nullable = true)
+    public Integer getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(Integer dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    @Basic
+    @Column(name = "day_of_month", nullable = true)
+    public Integer getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(Integer dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    @Basic
+    @Column(name = "month_of_year", nullable = true)
+    public Integer getMonthOfYear() {
+        return monthOfYear;
+    }
+
+    public void setMonthOfYear(Integer monthOfYear) {
+        this.monthOfYear = monthOfYear;
     }
 }
