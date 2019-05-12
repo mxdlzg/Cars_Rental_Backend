@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<RtUserEntity,Long> {
     RtUserEntity findUserBeanById(Integer id);
     RtUserEntity findByUsername(String name);
+    RtUserEntity findById(int id);
 }

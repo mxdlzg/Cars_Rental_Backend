@@ -40,6 +40,8 @@ public class OrderService {
     OrderPriceRepository orderPriceRepository;
     @Autowired
     OrderStateRepository orderStateRepository;
+    @Autowired
+    PayOrderRepository payOrderRepository;
 
     //view
     @Autowired
@@ -75,7 +77,7 @@ public class OrderService {
         return new OrderPriceDetail(realDetail, amount, startTime, endTime, startStore.getLocation(), endStore.getLocation());
     }
 
-    private RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking) {
+    private RtOrderEntity submit(OrderPriceDetail priceDetail, RtOrderEntity orderEntity, RtPayOrderEntity payOrderEntity, RtCustomerEntity customerEntity, RtBookingEntity preBooking, RtBookingEntity nextBooking) {
         //upsssssssssssdate booking
         RtBookingEntity bookingEntity = new RtBookingEntity();
         bookingEntity.setBelongUserId(orderEntity.getBelongUserId());
@@ -117,6 +119,12 @@ public class OrderService {
             //state relation
             orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),
                     1, "OrderSystem"));
+
+            //pay info
+            payOrderEntity.setDescription("订单"+orderEntity.getId()+"--支付系统预订订单");
+            payOrderEntity.setOrderId(orderEntity.getId());
+            payOrderRepository.save(payOrderEntity);
+
             return orderEntity;
         } else {
             throw new IndexOutOfBoundsException("订单插入失败，执行回滚");
@@ -138,6 +146,7 @@ public class OrderService {
         Timestamp startTime = Converter.toTimestamp(startDate);
         Timestamp endTime = Converter.toTimestamp(endDate);
         int days = Converter.diffDays(startDate, endDate);
+        int invoiceType = map.getInvoiceType();
 
         //booking
         boolean bookingExist = bookingRepository.existsByCarId(carId);
@@ -173,9 +182,12 @@ public class OrderService {
         orderEntity.setStartStoreId(map.getStart());
         orderEntity.setEndStoreId(map.getEnd());
 
+        //create pay info
+        RtPayOrderEntity payOrderEntity = new RtPayOrderEntity("",false,orderEntity.getTotalPrice(),0,invoiceType);
+
 
         //if car rent able
-        RtOrderEntity submitOrderEntity = submit(priceDetail, orderEntity, customerEntity, preBooking, nextBooking);
+        RtOrderEntity submitOrderEntity = submit(priceDetail, orderEntity, payOrderEntity, customerEntity, preBooking, nextBooking);
         if (submitOrderEntity != null) {
             orderSubmitResult = new OrderSubmitResult(submitOrderEntity.getId(), submitOrderEntity.getCreatedDate());
         } else {

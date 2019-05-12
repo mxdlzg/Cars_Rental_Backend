@@ -14,9 +14,9 @@ public class RtvOrderPayInfoEntity {
     private Timestamp payDate;
     private Double realPrice;
     private String description;
+    private Integer invoiceType;
 
     @Id
-    @Basic
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -103,5 +103,15 @@ public class RtvOrderPayInfoEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, totalPrice, createdDate, finished, payDate, realPrice, description);
+    }
+
+    @Basic
+    @Column(name = "invoice_type", nullable = true)
+    public Integer getInvoiceType() {
+        return invoiceType;
+    }
+
+    public void setInvoiceType(Integer invoiceType) {
+        this.invoiceType = invoiceType;
     }
 }

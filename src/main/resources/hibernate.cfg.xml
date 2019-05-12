@@ -29,6 +29,10 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtvAnalysisDaySaleEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvAnalysisDayAccessEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvStoresSalesEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtInsuranceEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtInvoiceEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtNotifyEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtPayOrderEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

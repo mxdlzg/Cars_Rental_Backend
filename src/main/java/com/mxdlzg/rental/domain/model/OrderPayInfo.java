@@ -11,14 +11,16 @@ public class OrderPayInfo {
     private Timestamp createdDate;
     private boolean finished;
     private Timestamp payDate;
+    private int invoiceType;
 
-    public OrderPayInfo(int id, String description, double totalPrice, Timestamp createdDate, boolean finished, Timestamp payDate) {
+    public OrderPayInfo(int id, String description, double totalPrice, Timestamp createdDate, boolean finished, Timestamp payDate,int invoiceType) {
         this.id = id;
         this.description = description;
         this.totalPrice = totalPrice;
         this.createdDate = createdDate;
         this.finished = finished;
         this.payDate = payDate;
+        this.invoiceType = invoiceType;
     }
 
     public static OrderPayInfo valueOf(RtvOrderPayInfoEntity infoEntity) {
@@ -27,7 +29,8 @@ public class OrderPayInfo {
                 infoEntity.getTotalPrice(),
                 infoEntity.getCreatedDate(),
                 infoEntity.getFinished(),
-                infoEntity.getPayDate());
+                infoEntity.getPayDate(),
+                infoEntity.getInvoiceType());
     }
 
     public int getId() {
@@ -76,5 +79,13 @@ public class OrderPayInfo {
 
     public void setPayDate(Timestamp payDate) {
         this.payDate = payDate;
+    }
+
+    public int getInvoiceType() {
+        return invoiceType;
+    }
+
+    public void setInvoiceType(int invoiceType) {
+        this.invoiceType = invoiceType;
     }
 }
