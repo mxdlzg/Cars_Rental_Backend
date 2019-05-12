@@ -79,6 +79,8 @@ public class PayService {
         orderEntity.setTypeId(3);
         orderEntity.setCurrentStateId(4);
 
+        orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),4,"PaySystem"));
+
         //user
         userService.increaseIntegral(userId,5);
 

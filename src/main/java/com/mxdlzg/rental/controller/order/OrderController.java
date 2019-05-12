@@ -85,4 +85,12 @@ public class OrderController {
         }
         return restResult;
     }
+
+    @PutMapping("/api/order/takeCar")
+    public RestResult<?> checkout(@RequestHeader("Authorization") String token,
+                                  @RequestParam(value = "id")Integer id){
+        int userId = JwtTokenUtils.getUserId(token);
+
+        return new RestResult<>(orderService.takeCar(id,userId));
+    }
 }

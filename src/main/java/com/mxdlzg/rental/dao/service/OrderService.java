@@ -42,6 +42,8 @@ public class OrderService {
     OrderStateRepository orderStateRepository;
     @Autowired
     PayOrderRepository payOrderRepository;
+    @Autowired
+    NotifyRepository notifyRepository;
 
     //view
     @Autowired
@@ -237,5 +239,22 @@ public class OrderService {
             }
         }
         return orderDetail;
+    }
+
+    public BaseResult takeCar(Integer id, int userId) {
+        RtOrderEntity orderEntity = orderRepository.getOne(id);
+        if (orderEntity.getCurrentStateId() !=3){
+            RtOrderStateEntity orderStateEntity = orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),3,"PaySystem"));
+            orderEntity.setCurrentStateId(3);
+
+            //notify
+            notifyRepository.save(new RtNotifyEntity("订单已取车",
+                    "订单"+orderEntity.getId()+"已取车成功，祝您旅途愉快! 详情请点击进入订单界面查询",
+                    "/order/OrderDetail?id="+orderEntity.getId(),
+                    userId));
+
+            return new BaseResult(true,"取车成功");
+        }
+        return new BaseResult(false,"此订单已取车");
     }
 }
