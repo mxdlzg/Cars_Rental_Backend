@@ -3,8 +3,10 @@ package com.mxdlzg.rental.dao.service;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.mxdlzg.rental.dao.respository.*;
 import com.mxdlzg.rental.domain.entity.*;
+import com.mxdlzg.rental.domain.model.CheckoutResult;
 import com.mxdlzg.rental.domain.model.OrderPayInfo;
 import com.mxdlzg.rental.domain.model.PayResult;
+import com.mxdlzg.rental.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class PayService {
     OrderStateRepository orderStateRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    CheckoutRepository checkoutRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public PayResult payment(int id, int userId){
@@ -64,5 +68,32 @@ public class PayService {
         PayResult result = new PayResult(true,"支付成功");
         result.setRealPayPrice(orderPayInfo.getTotalPrice());
         return result;
+    }
+
+    public CheckoutResult checkout(Integer id, int userId) {
+        //order
+        RtOrderEntity orderEntity = orderRepository.getOne(id);
+        if (orderEntity.getTypeId() == 3){
+            return new CheckoutResult(false,orderEntity.getTotalPrice(),"此订单已被结算，操作无效");
+        }
+        orderEntity.setTypeId(3);
+        orderEntity.setCurrentStateId(4);
+
+        //user
+        userService.increaseIntegral(userId,5);
+
+        //invoice
+        RtInvoiceEntity invoiceEntity = invoiceRepository.save(new RtInvoiceEntity("普通增值税发票-结算",3,orderEntity.getId()));
+
+        //checkout
+        checkoutRepository.save(new RtCheckoutEntity(orderEntity.getId(),orderEntity.getTotalPrice(),new Timestamp(new Date().getTime()),invoiceEntity.getId()));
+
+        //notify
+        notifyRepository.save(new RtNotifyEntity("订单结算成功",
+                "订单"+orderEntity.getId()+"结算成功，详情请点击进入订单界面查询",
+                "/order/OrderDetail?id="+orderEntity.getId(),
+                userId));
+
+        return new CheckoutResult(true,orderEntity.getTotalPrice(),"结算成功");
     }
 }

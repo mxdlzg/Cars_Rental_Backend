@@ -33,6 +33,7 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtInvoiceEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtNotifyEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtPayOrderEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtCheckoutEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

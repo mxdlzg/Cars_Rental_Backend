@@ -37,9 +37,11 @@ public class PayController {
     }
 
     @PutMapping("/api/pay/checkout")
-    public RestResult<?> checkout(@RequestParam(value = "id")Integer id){
+    public RestResult<?> checkout(@RequestHeader("Authorization") String token,
+                                  @RequestParam(value = "id")Integer id){
+        int userId = JwtTokenUtils.getUserId(token);
 
-        return null;
+        return new RestResult<>(payService.checkout(id,userId));
     }
 
 }
