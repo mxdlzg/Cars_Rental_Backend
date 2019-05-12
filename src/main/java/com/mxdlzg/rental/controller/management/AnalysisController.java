@@ -18,24 +18,28 @@ public class AnalysisController {
     AnalysisService analysisService;
 
     @GetMapping("/api/analysis/overview")
-    public RestResult<AnalysisOverview> overview(){
+    public RestResult<AnalysisOverview> overview() {
         return new RestResult<>(analysisService.queryOverview());
     }
 
     @GetMapping("/api/analysis/saleStatistic")
-    public RestResult<SalesCard> salesCard(@RequestParam("type")String type,
-                                           @RequestParam(value = "start",required = false)Long start,
-                                           @RequestParam(value = "end",required = false)Long end){
+    public RestResult<SalesCard> salesCard(@RequestParam("type") String type,
+                                           @RequestParam(value = "start", required = false) Long start,
+                                           @RequestParam(value = "end", required = false) Long end) {
 
-        return new RestResult<SalesCard>(analysisService.querySalesCard(type,start,end));
+        return new RestResult<SalesCard>(analysisService.querySalesCard(type, start, end));
     }
 
     @GetMapping("/api/analysis/saleType")
-    public RestResult<List<OptionsKV<Long>>> salesType(){
+    public RestResult<List<OptionsKV<Long>>> salesType() {
         return new RestResult<List<OptionsKV<Long>>>(analysisService.querySalesType());
     }
 
 
+    @GetMapping("/api/analysis/storesSale")
+    public RestResult<List<OptionsKV<Float>>> storesSale() {
+        return new RestResult<>(analysisService.queryStoreSale());
+    }
 
 
 

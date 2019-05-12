@@ -6,14 +6,11 @@ import com.mxdlzg.rental.domain.model.AnalysisOverview;
 import com.mxdlzg.rental.domain.model.OptionsKV;
 import com.mxdlzg.rental.domain.model.SalesCard;
 import com.mxdlzg.rental.utils.Converter;
+import com.mxdlzg.rental.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AnalysisService {
@@ -25,6 +22,9 @@ public class AnalysisService {
     AccessAnalysisRepo accessAnalysisRepo;
     @Autowired
     OrderCarInfoRepo orderCarInfoRepo;
+    @Autowired
+    StoresSaleRepo storesSaleRepo;
+
 
     public AnalysisOverview queryOverview(){
         RtvAnalysisDaySaleEntity saleEntity = analysisRepository.findTopByDayTime();
@@ -74,6 +74,20 @@ public class AnalysisService {
 
     public List<OptionsKV<Long>> querySalesType() {
         return orderCarInfoRepo.querySalesType();
+    }
+
+    public List<OptionsKV<Float>> queryStoreSale(){
+        //finish/total
+        List<OptionsKV<Float>> storeData = new ArrayList<>();
+        List<Pair<String,Long>> totalSale = storesSaleRepo.totalSale();
+        List<StoresSaleRepo.FinishedSaleResult> finishedSale = storesSaleRepo.finishedSale();
+        for (int i = 0; i < totalSale.size(); i++) {
+            storeData.add(new OptionsKV<Float>(totalSale.get(i).getFirst(),
+                    (float) (finishedSale.get(i).getAmount()/totalSale.get(i).getSecond())));
+        }
+        totalSale.clear();
+        finishedSale.clear();
+        return storeData;
     }
 }
 

@@ -28,6 +28,7 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtPageAccessEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvAnalysisDaySaleEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvAnalysisDayAccessEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvStoresSalesEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

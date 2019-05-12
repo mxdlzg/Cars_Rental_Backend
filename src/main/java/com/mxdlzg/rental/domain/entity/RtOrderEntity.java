@@ -1,7 +1,6 @@
 package com.mxdlzg.rental.domain.entity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -15,9 +14,6 @@ public class RtOrderEntity {
     private Timestamp startDate;
     private Timestamp endDate;
     private Integer carId;
-    private BigDecimal servicePrice;
-    private BigDecimal vehiclePrice;
-    private Integer type;
     private Timestamp createdDate;
     private Boolean isValid;
     private String description;
@@ -25,18 +21,17 @@ public class RtOrderEntity {
     private Integer currentStateId;
     private Integer startStoreId;
     private Integer endStoreId;
-
+    private Integer typeId;
     public RtOrderEntity() {
     }
-
-    public RtOrderEntity(Integer belongUserId, float totalPrice, Integer rentDays, Timestamp startDate, Timestamp endDate, Integer carId, Integer type, Boolean isValid) {
+    public RtOrderEntity(Integer belongUserId, float totalPrice, Integer rentDays, Timestamp startDate, Timestamp endDate, Integer carId, Integer typeId, Boolean isValid) {
         this.belongUserId = belongUserId;
         this.totalPrice = totalPrice;
         this.rentDays = rentDays;
         this.startDate = startDate;
         this.endDate = endDate;
         this.carId = carId;
-        this.type = type;
+        this.typeId = typeId;
         this.isValid = isValid;
         this.currentStateId = 1;
     }
@@ -112,35 +107,6 @@ public class RtOrderEntity {
         this.carId = carId;
     }
 
-    @Basic
-    @Column(name = "service_price", nullable = true, precision = 2)
-    public BigDecimal getServicePrice() {
-        return servicePrice;
-    }
-
-    public void setServicePrice(BigDecimal servicePrice) {
-        this.servicePrice = servicePrice;
-    }
-
-    @Basic
-    @Column(name = "vehicle_price", nullable = true, precision = 2)
-    public BigDecimal getVehiclePrice() {
-        return vehiclePrice;
-    }
-
-    public void setVehiclePrice(BigDecimal vehiclePrice) {
-        this.vehiclePrice = vehiclePrice;
-    }
-
-    @Basic
-    @Column(name = "type", nullable = true)
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 
     @Basic
     @Column(name = "created_date", nullable = true)
@@ -194,9 +160,7 @@ public class RtOrderEntity {
                 Objects.equals(startDate, that.startDate) &&
                 Objects.equals(endDate, that.endDate) &&
                 Objects.equals(carId, that.carId) &&
-                Objects.equals(servicePrice, that.servicePrice) &&
-                Objects.equals(vehiclePrice, that.vehiclePrice) &&
-                Objects.equals(type, that.type) &&
+                Objects.equals(typeId, that.typeId) &&
                 Objects.equals(createdDate, that.createdDate) &&
                 Objects.equals(isValid, that.isValid) &&
                 Objects.equals(description, that.description) &&
@@ -205,7 +169,7 @@ public class RtOrderEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, belongUserId, totalPrice, rentDays, startDate, endDate, carId, servicePrice, vehiclePrice, type, createdDate, isValid, description, payDate);
+        return Objects.hash(id, belongUserId, totalPrice, rentDays, startDate, endDate, carId, typeId, createdDate, isValid, description, payDate);
     }
 
     @Basic
@@ -236,5 +200,15 @@ public class RtOrderEntity {
 
     public void setEndStoreId(Integer endStoreId) {
         this.endStoreId = endStoreId;
+    }
+
+    @Basic
+    @Column(name = "type_id", nullable = true)
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 }
