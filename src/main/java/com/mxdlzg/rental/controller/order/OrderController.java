@@ -21,6 +21,7 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+
     @GetMapping(value = "/api/car/{carId}")
     public RestResult<RtCarEntity> queryCarDetail(@PathVariable int carId) {
         // TODO: 2019/4/30 处理query null 情况
@@ -92,5 +93,13 @@ public class OrderController {
         int userId = JwtTokenUtils.getUserId(token);
 
         return new RestResult<>(orderService.takeCar(id,userId));
+    }
+
+    @DeleteMapping("/api/order/cancelOrder")
+    public RestResult<?> cancelOrder(@RequestHeader("Authorization") String token,
+                                  @RequestParam(value = "id")Integer id){
+        int userId = JwtTokenUtils.getUserId(token);
+
+        return new RestResult<>(orderService.cancelOrder(id,userId));
     }
 }

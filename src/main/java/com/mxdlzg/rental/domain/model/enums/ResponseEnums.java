@@ -37,7 +37,8 @@ public enum ResponseEnums {
     RESOURCE_UNAVAILABLE("029","资源不可用"),
     INVALID_USER("030","用户信息验证失败，非法用户"),
     LOGIN_INVALID_OR_EXPIRED("031","登录无效或登录已过期"),
-    ORDER_HAS_PAID("032","订单已支付");
+    ORDER_HAS_PAID("032","订单已支付"),
+    INVALID_ORDER("033","无效的订单");
 
     private String code;
     private String msg;

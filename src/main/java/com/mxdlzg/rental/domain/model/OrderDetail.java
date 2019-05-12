@@ -1,6 +1,8 @@
 package com.mxdlzg.rental.domain.model;
 
 import com.mxdlzg.rental.domain.entity.RtCustomerEntity;
+import com.mxdlzg.rental.domain.entity.RtOrderEntity;
+import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -11,10 +13,17 @@ public class OrderDetail extends BaseDaoResult {
     private Timestamp operateDate;
     private List<UserInfo> userInfo;
     private Location startLocation, endLocation;
+    private RtOrderEntity rtOrderEntity;
+
+
 
     public OrderDetail(int current, Timestamp operateDate) {
         this.current = current;
         this.operateDate = operateDate;
+    }
+
+    public OrderDetail() {
+        super(ResponseEnums.INVALID_ORDER);
     }
 
     public void setUserInfo(List<RtCustomerEntity> list) {
@@ -57,6 +66,14 @@ public class OrderDetail extends BaseDaoResult {
 
     public Location getEndLocation() {
         return endLocation;
+    }
+
+    public RtOrderEntity getRtOrderEntity() {
+        return rtOrderEntity;
+    }
+
+    public void setRtOrderEntity(RtOrderEntity rtOrderEntity) {
+        this.rtOrderEntity = rtOrderEntity;
     }
 }
 
@@ -119,4 +136,6 @@ class Location {
     public Timestamp getDate() {
         return date;
     }
+
+
 }

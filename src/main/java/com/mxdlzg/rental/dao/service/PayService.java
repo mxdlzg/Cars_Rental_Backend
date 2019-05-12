@@ -45,6 +45,10 @@ public class PayService {
         //do pay
         //order
         RtOrderEntity orderEntity = orderRepository.getOne(id);
+        if (!orderEntity.getValid()){
+            return new PayResult(false,"无效的订单");
+        }
+
         orderEntity.setTypeId(4);
         orderEntity.setCurrentStateId(2);
         orderRepository.flush();
@@ -70,11 +74,15 @@ public class PayService {
         return result;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public CheckoutResult checkout(Integer id, int userId) {
         //order
         RtOrderEntity orderEntity = orderRepository.getOne(id);
         if (orderEntity.getTypeId() == 3){
             return new CheckoutResult(false,orderEntity.getTotalPrice(),"此订单已被结算，操作无效");
+        }
+        if (!orderEntity.getValid()){
+            return new CheckoutResult(false,orderEntity.getTotalPrice(),"无效的订单");
         }
         orderEntity.setTypeId(3);
         orderEntity.setCurrentStateId(4);

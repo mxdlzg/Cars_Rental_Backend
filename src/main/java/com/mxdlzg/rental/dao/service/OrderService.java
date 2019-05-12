@@ -219,7 +219,7 @@ public class OrderService {
     public OrderDetail queryOrderDetail(int userId, int id) {
         OrderDetail orderDetail = null;
         RtOrderEntity orderEntity = orderRepository.findByBelongUserIdAndId(userId, id);
-        if (orderEntity != null) {
+        if (orderEntity != null && orderEntity.getValid()) {
             RtvStateCurrentEntity currentEntity = stateCurrentRepo.findByOrderIdAndStateId(orderEntity.getId(), orderEntity.getCurrentStateId());
             //new result
             orderDetail = new OrderDetail(currentEntity.getCurrent(),currentEntity.getChangedDate());
@@ -237,13 +237,17 @@ public class OrderService {
                 //same with start
                 orderDetail.setEndLocation();
             }
+            orderDetail.setRtOrderEntity(orderEntity);
+        }else {
+            orderDetail = new OrderDetail();
         }
         return orderDetail;
     }
 
+    @Transactional
     public BaseResult takeCar(Integer id, int userId) {
         RtOrderEntity orderEntity = orderRepository.getOne(id);
-        if (orderEntity.getCurrentStateId() !=3){
+        if (orderEntity.getCurrentStateId() !=3 && orderEntity.getValid()){
             RtOrderStateEntity orderStateEntity = orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),3,"PaySystem"));
             orderEntity.setCurrentStateId(3);
 
@@ -255,6 +259,17 @@ public class OrderService {
 
             return new BaseResult(true,"取车成功");
         }
-        return new BaseResult(false,"此订单已取车");
+        return new BaseResult(false,orderEntity.getValid()?"此订单已取车":"无效的订单");
+    }
+
+    @Transactional
+    public BaseResult cancelOrder(Integer id, int userId) {
+        RtOrderEntity orderEntity = orderRepository.getOne(id);
+        if (orderEntity.getTypeId() != 2 && orderEntity.getValid()){
+            orderEntity.setTypeId(2);
+            orderEntity.setValid(false);
+            return new BaseResult(true,"订单已取消");
+        }
+        return new BaseResult(false,orderEntity.getValid()?"此订单已被取消，请勿重复操作":"无效的订单");
     }
 }
