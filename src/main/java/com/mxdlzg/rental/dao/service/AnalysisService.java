@@ -5,6 +5,7 @@ import com.mxdlzg.rental.domain.entity.RtvAnalysisDaySaleEntity;
 import com.mxdlzg.rental.domain.model.AnalysisOverview;
 import com.mxdlzg.rental.domain.model.OptionsKV;
 import com.mxdlzg.rental.domain.model.SalesCard;
+import com.mxdlzg.rental.domain.model.StoreSalesChartData;
 import com.mxdlzg.rental.utils.Converter;
 import com.mxdlzg.rental.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,12 +83,21 @@ public class AnalysisService {
         List<Pair<String,Long>> totalSale = storesSaleRepo.totalSale();
         List<StoresSaleRepo.FinishedSaleResult> finishedSale = storesSaleRepo.finishedSale();
         for (int i = 0; i < totalSale.size(); i++) {
-            storeData.add(new OptionsKV<Float>(totalSale.get(i).getFirst(),
+            storeData.add(new OptionsKV<Float>(totalSale.get(i).getFirst()+"("+finishedSale.get(i).getId()+")",
                     (float) (finishedSale.get(i).getAmount()/totalSale.get(i).getSecond())));
         }
         totalSale.clear();
         finishedSale.clear();
         return storeData;
+    }
+
+    public List<StoreSalesChartData> queryStoreSale(Long storeId) {
+        List<StoresSaleRepo.FinishedSaleDetailResult> list = storesSaleRepo.storeSaleDetail(storeId);
+        List<StoreSalesChartData> rsList= new ArrayList<>();
+        for (StoresSaleRepo.FinishedSaleDetailResult finishedSaleDetailResult : list) {
+            rsList.add(new StoreSalesChartData(finishedSaleDetailResult.getX(),finishedSaleDetailResult.getY1(),finishedSaleDetailResult.getY2()));
+        }
+        return rsList;
     }
 }
 

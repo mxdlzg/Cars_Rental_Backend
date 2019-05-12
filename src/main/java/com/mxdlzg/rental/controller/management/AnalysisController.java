@@ -1,14 +1,9 @@
 package com.mxdlzg.rental.controller.management;
 
 import com.mxdlzg.rental.dao.service.AnalysisService;
-import com.mxdlzg.rental.domain.model.AnalysisOverview;
-import com.mxdlzg.rental.domain.model.OptionsKV;
-import com.mxdlzg.rental.domain.model.RestResult;
-import com.mxdlzg.rental.domain.model.SalesCard;
+import com.mxdlzg.rental.domain.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,7 +36,10 @@ public class AnalysisController {
         return new RestResult<>(analysisService.queryStoreSale());
     }
 
-
+    @GetMapping("/api/analysis/storesSale/{storeId}")
+    public RestResult<List<StoreSalesChartData>> storesSaleDetail(@PathVariable Long storeId) {
+        return new RestResult<>(analysisService.queryStoreSale(storeId));
+    }
 
 
 }
