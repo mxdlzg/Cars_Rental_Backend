@@ -1,15 +1,16 @@
 package com.mxdlzg.rental.dao.service;
 
 import com.mxdlzg.rental.dao.respository.*;
+import com.mxdlzg.rental.domain.entity.RtCarEntity;
 import com.mxdlzg.rental.domain.entity.RtvAnalysisDaySaleEntity;
-import com.mxdlzg.rental.domain.model.AnalysisOverview;
-import com.mxdlzg.rental.domain.model.OptionsKV;
-import com.mxdlzg.rental.domain.model.SalesCard;
-import com.mxdlzg.rental.domain.model.StoreSalesChartData;
+import com.mxdlzg.rental.domain.model.*;
 import com.mxdlzg.rental.utils.Converter;
 import com.mxdlzg.rental.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -25,6 +26,8 @@ public class AnalysisService {
     OrderCarInfoRepo orderCarInfoRepo;
     @Autowired
     StoresSaleRepo storesSaleRepo;
+    @Autowired
+    CarRepository carRepository;
 
 
     public AnalysisOverview queryOverview(){
@@ -98,6 +101,21 @@ public class AnalysisService {
             rsList.add(new StoreSalesChartData(finishedSaleDetailResult.getX(),finishedSaleDetailResult.getY1(),finishedSaleDetailResult.getY2()));
         }
         return rsList;
+    }
+
+    public List<RtCarEntity> queryRecommendation(Long userId) {
+        //comm
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8001/api/recommend";
+        HttpEntity<LocalRequest> entity = new HttpEntity<>(new LocalRequest("lfm",15));
+        LocalResponse response = restTemplate.exchange(url, HttpMethod.POST,entity,LocalResponse.class).getBody();
+
+        //check
+        if (response.getData() != null && response.getData().isSuccess()){
+            List<RtCarEntity> cars = carRepository.findRcmds(response.getData().getUser_id());
+            return cars;
+        }
+        return null;
     }
 }
 

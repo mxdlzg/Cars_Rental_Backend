@@ -1,5 +1,7 @@
 package com.mxdlzg.rental.dao.service;
 
+import com.mxdlzg.rental.dao.respository.CurrentUserRepo;
+import com.mxdlzg.rental.domain.entity.RtCurrentUserEntity;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.dao.respository.UserRepository;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    CurrentUserRepo currentUserRepo;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -35,8 +39,8 @@ public class UserService implements UserDetailsService {
         return ResponseEnums.VALID_USER;
     }
 
-    public RtUserEntity queryUserProfile(int userId) {
-        return userRepository.findUserBeanById(userId);
+    public RtCurrentUserEntity queryUserProfile(int userId) {
+        return currentUserRepo.findByUserId(userId);
     }
 
     @Transactional

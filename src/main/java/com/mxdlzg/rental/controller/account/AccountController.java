@@ -2,6 +2,7 @@ package com.mxdlzg.rental.controller.account;
 
 import com.mxdlzg.rental.controller.BaseController;
 import com.mxdlzg.rental.dao.service.UserService;
+import com.mxdlzg.rental.domain.entity.RtCurrentUserEntity;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.domain.model.LoginResult;
@@ -62,10 +63,11 @@ public class AccountController extends BaseController {
     }
 
     @GetMapping("/api/currentUser")
-    public RestResult<RtUserEntity> queryUser(@RequestHeader("Authorization") String token){
+    public RestResult<RtCurrentUserEntity> queryUser(@RequestHeader("Authorization") String token){
         doBury();
         int userId = JwtTokenUtils.getUserId(token);
-        return new RestResult<>(userService.queryUserProfile(userId));
+        RestResult<RtCurrentUserEntity> restResult = new RestResult<>(userService.queryUserProfile(userId));
+        return restResult;
     }
 
 }

@@ -3,8 +3,13 @@ package com.mxdlzg.rental.controller.management;
 import com.mxdlzg.rental.dao.service.AnalysisService;
 import com.mxdlzg.rental.domain.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -41,5 +46,8 @@ public class AnalysisController {
         return new RestResult<>(analysisService.queryStoreSale(storeId));
     }
 
-
+    @GetMapping("/api/recommendation/{userId}")
+    public RestResult<?> recommendation(@PathVariable Long userId){
+        return new RestResult<>(analysisService.queryRecommendation(userId));
+    }
 }

@@ -3,6 +3,7 @@ package com.mxdlzg.rental.dao.exception;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 import com.mxdlzg.rental.domain.model.exception.RentalRuntimeException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
@@ -109,6 +110,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value=HttpStatus.METHOD_NOT_ALLOWED)
     public RestResult<ResponseEnums> notAllowed(Exception e){
         logger.error("occurs error when execute method ,message {}",e.getMessage());
+        if (e instanceof MalformedJwtException){
+            return new RestResult<>(false, ResponseEnums.JWT_MALFORMED_TOKEN);
+        }
         return new RestResult<>(false, ResponseEnums.METHOD_NOT_ALLOWED);
     }
 

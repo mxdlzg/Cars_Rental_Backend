@@ -2,10 +2,12 @@ package com.mxdlzg.rental.domain.model;
 
 public class LoginResult {
     private String type,currentAuthority;
+    private String token;
 
-    public LoginResult(String type, String currentAuthority) {
+    public LoginResult(String type, String currentAuthority, String token) {
         this.type = type;
         this.currentAuthority = currentAuthority;
+        this.token = token;
     }
 
     public String getType() {
@@ -22,5 +24,13 @@ public class LoginResult {
 
     public void setCurrentAuthority(String currentAuthority) {
         this.currentAuthority = currentAuthority;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

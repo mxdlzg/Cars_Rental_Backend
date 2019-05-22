@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter(new JWTAuthenticationEntryPoint());
 
-        http.cors().and().csrf().disable()
+        http.csrf().disable()
                 .authorizeRequests()
                 // TODO: 2019/3/3 task测试界面
                 .antMatchers("/tasks").authenticated()

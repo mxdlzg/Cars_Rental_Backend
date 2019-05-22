@@ -64,13 +64,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         for (GrantedAuthority authority : authorities) {
             role = authority.getAuthority();
         } // 根据用户名，角色创建token
-        String token = JwtTokenUtils.createToken(jwtUser, role, isRemember);
+        String token = JwtTokenUtils.TOKEN_PREFIX + JwtTokenUtils.createToken(jwtUser, role, isRemember);
 
         // 返回创建成功的token
         // 但是这里创建的token只是单纯的token
         // 按照jwt的规定，最后请求的格式应该是 `Bearer token`
-        response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
-        LoginResult loginResult = new LoginResult(loginData.get(),role);
+        response.setHeader("token", token);
+        LoginResult loginResult = new LoginResult(loginData.get(),role,token);
         ServerletResponse.doResponse(response,ResponseEnums.LOGIN_SUCCESS,loginResult,"ok",true);
     }
 
@@ -78,7 +78,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse
             response, AuthenticationException failed) throws IOException, ServletException {
-        ServerletResponse.doResponse(response,ResponseEnums.NOLOGIN,new LoginResult(loginData.get(),"ROLE_GUEST"),"error",false);
+        ServerletResponse.doResponse(response,ResponseEnums.NOLOGIN,new LoginResult(loginData.get(),"ROLE_GUEST",""),"error",false);
     }
 
 }

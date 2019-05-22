@@ -30,4 +30,7 @@ public interface CarRepository extends BaseRepository<RtCarEntity, Integer> {
 
     @Query(value = "select book from RtBookingEntity book where book.carId=:id and book.endDate<:start and book.nextSpaceDays>=:days")
     List<RtBookingEntity> isRentAble(@Param("id") Integer carId, @Param("start") Timestamp startTime, @Param("days") int days);
+
+    @Query(value = "SELECT * FROM rt_car,rt_lfm_recommendation WHERE rt_car.id=rt_lfm_recommendation.car_id AND rt_lfm_recommendation.user_id=:id",nativeQuery = true)
+    List<RtCarEntity> findRcmds(@Param("id") int user_id);
 }
