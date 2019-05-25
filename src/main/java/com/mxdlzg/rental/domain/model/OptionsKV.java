@@ -1,7 +1,12 @@
 package com.mxdlzg.rental.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Map;
 
 public class OptionsKV<T> implements Serializable {
     private String Label;

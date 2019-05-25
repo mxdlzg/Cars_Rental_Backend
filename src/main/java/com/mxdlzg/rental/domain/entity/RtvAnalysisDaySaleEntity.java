@@ -1,17 +1,35 @@
 package com.mxdlzg.rental.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "rtv_analysis_day_sale", schema = "rental", catalog = "")
 public class RtvAnalysisDaySaleEntity {
     private Double dayTotal;
+    @JsonProperty("y")
     private long dayPaidCount;
-    private String dayTime;
+    @JsonProperty("x")
+    private Timestamp dayTime;
     private Integer dayOfWeek;
     private Integer dayOfMonth;
     private Integer monthOfYear;
+
+    public RtvAnalysisDaySaleEntity() {
+        this.dayTime = new Timestamp(new Date().getTime());
+        LocalDateTime time = dayTime.toLocalDateTime();
+        this.dayTotal = 0.0;
+        this.dayPaidCount = 0;
+        this.dayOfWeek = time.getDayOfWeek().getValue();
+        this.dayOfMonth = time.getDayOfMonth();
+        this.monthOfYear = time.getMonthValue();
+    }
+
 
     @Basic
     @Column(name = "day_total", nullable = true, precision = 2)
@@ -33,14 +51,13 @@ public class RtvAnalysisDaySaleEntity {
         this.dayPaidCount = dayPaidCount;
     }
 
-    @Basic
     @Id
     @Column(name = "day_time", nullable = true, length = 10)
-    public String getDayTime() {
+    public Timestamp getDayTime() {
         return dayTime;
     }
 
-    public void setDayTime(String dayTime) {
+    public void setDayTime(Timestamp dayTime) {
         this.dayTime = dayTime;
     }
 

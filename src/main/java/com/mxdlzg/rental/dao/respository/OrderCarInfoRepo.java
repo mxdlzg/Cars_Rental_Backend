@@ -5,7 +5,9 @@ import com.mxdlzg.rental.domain.model.OptionsKV;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface OrderCarInfoRepo extends BaseRepository<RtvOrderCarInfoEntity,Integer> {
@@ -20,6 +22,10 @@ public interface OrderCarInfoRepo extends BaseRepository<RtvOrderCarInfoEntity,I
     @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.storeName,sum (r.totalPrice)) from RtvOrderCarInfoEntity r where r.createdDate>=YEAR(NOW()) group by r.startStoreId")
     List<OptionsKV<Double>> statisticDetailRankingYear();
 
+    @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.storeName,sum (r.totalPrice)) from RtvOrderCarInfoEntity r where r.createdDate>=:start and r.createdDate<=:end group by r.startStoreId")
+    List<OptionsKV<Double>> statisticDetailRankingBetween(@Param("start")Timestamp start, @Param("end")Timestamp end);
+
     @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.brandName,count(r)) from RtvOrderCarInfoEntity r group by r.brandName order by count(r) desc")
     List<OptionsKV<Long>> querySalesType();
+
 }

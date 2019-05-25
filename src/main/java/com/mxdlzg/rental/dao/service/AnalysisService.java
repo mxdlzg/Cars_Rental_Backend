@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -33,6 +34,9 @@ public class AnalysisService {
     public AnalysisOverview queryOverview(){
         RtvAnalysisDaySaleEntity saleEntity = analysisRepository.findTopByDayTime();
         AnalysisOverview overview = analysisRepository.statisticTotal();
+        if (saleEntity == null){
+            saleEntity = new RtvAnalysisDaySaleEntity();
+        }
         overview.setTodaySale(saleEntity.getDayTotal());
         overview.setTodayPaidCount(saleEntity.getDayPaidCount());
         overview.setTodayAccess(pageAccessRepository.todayCount());
@@ -46,7 +50,7 @@ public class AnalysisService {
 
     public SalesCard querySalesCard(String type, Long start, Long end) {
         //sales
-        List<OptionsKV> sales = null;
+        List<OptionsXY> sales = null;
         //ranking
         List<OptionsKV<Double>> storesRanking = null;
         switch (type){
@@ -62,9 +66,12 @@ public class AnalysisService {
                 sales = analysisRepository.statisticDetailYear();
                 storesRanking = orderCarInfoRepo.statisticDetailRankingYear();
                 break;
-                default:
-                    sales = analysisRepository.statisticDetailBetween(Converter.toTimestamp(start),Converter.toTimestamp(end));
-                    break;
+            default:
+                Timestamp timestamp = Converter.toTimestamp(start);
+                Timestamp timestamp1 = Converter.toTimestamp(end);
+                sales = analysisRepository.statisticDetailBetween(timestamp,timestamp1);
+                storesRanking = orderCarInfoRepo.statisticDetailRankingBetween(timestamp,timestamp1);
+                break;
         }
         storesRanking.sort(new Comparator<OptionsKV<Double>>() {
             @Override

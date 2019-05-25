@@ -3,19 +3,19 @@ package com.mxdlzg.rental.domain.model;
 import java.util.List;
 
 public class SalesCard {
-    private List<OptionsKV> list;
+    private List<OptionsXY> list;
     private List<OptionsKV<Double>> storeRankingList;
 
-    public SalesCard(List<OptionsKV> list, List<OptionsKV<Double>> storeRankingList) {
+    public SalesCard(List<OptionsXY> list, List<OptionsKV<Double>> storeRankingList) {
         this.list = list;
         this.storeRankingList = storeRankingList;
     }
 
-    public List<OptionsKV> getList() {
+    public List<OptionsXY> getList() {
         return list;
     }
 
-    public void setList(List<OptionsKV> list) {
+    public void setList(List<OptionsXY> list) {
         this.list = list;
     }
 

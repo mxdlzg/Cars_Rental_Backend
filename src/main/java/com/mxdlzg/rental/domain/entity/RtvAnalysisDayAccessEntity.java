@@ -1,5 +1,7 @@
 package com.mxdlzg.rental.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -7,7 +9,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "rtv_analysis_day_access", schema = "rental", catalog = "")
 public class RtvAnalysisDayAccessEntity {
+    @JsonProperty("x")
     private Date date;
+    @JsonProperty("y")
     private long count;
 
     @Id
