@@ -36,6 +36,8 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtCheckoutEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtUserRecommandationEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtCurrentUserEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvCarEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvOrderEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

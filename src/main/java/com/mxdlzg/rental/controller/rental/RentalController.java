@@ -33,9 +33,9 @@ public class RentalController {
     }
 
     @GetMapping("/stores")
-    public RestResult<?> queryStores(@RequestParam("1") int province,
-                                     @RequestParam("2") int city,
-                                     @RequestParam("3") int area) {
+    public RestResult<?> queryStores(@RequestParam("0") int province,
+                                     @RequestParam("1") int city,
+                                     @RequestParam("2") int area) {
         List<?> list = storeService.fetchStores(area);
         return new RestResult<List<?>>(list);
     }

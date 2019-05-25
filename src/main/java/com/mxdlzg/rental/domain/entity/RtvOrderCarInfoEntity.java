@@ -25,7 +25,6 @@ public class RtvOrderCarInfoEntity {
     private Integer startStoreId;
 
     @Basic
-    @Id
     @Column(name = "car_id", nullable = false)
     public int getCarId() {
         return carId;
@@ -95,7 +94,7 @@ public class RtvOrderCarInfoEntity {
         this.totalPrice = totalPrice;
     }
 
-    @Basic
+    @Id
     @Column(name = "order_id", nullable = false)
     public int getOrderId() {
         return orderId;

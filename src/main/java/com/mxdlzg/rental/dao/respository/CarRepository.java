@@ -17,15 +17,16 @@ public interface CarRepository extends BaseRepository<RtCarEntity, Integer> {
 
     List<RtCarEntity> findRtCarEntitiesByLatestAvailableDateAfterAndStoreId(Timestamp latestAvailableDate, int id);
 
-    @Query(value = "select car from RtCarEntity car,RtBookingEntity book where car.storeId=:id and car.serviceTypeId=:type and " +
-            "(car.latestAvailableDate<:start or " +
-            "   (" +
-            "       ((select count(b) from RtBookingEntity b where b.endDate<:start and b.nextSpaceDays>=:days)>0) " +
-            "       and " +
-            "       (car.id=book.carId)" +
-            "   )" +
-            ")"
-    )
+//    @Query(value = "select distinct car from RtCarEntity car,RtBookingEntity book where car.storeId=:id and car.serviceTypeId=:type and " +
+//            "(car.latestAvailableDate<:start or " +
+//            "   (" +
+//            "       ((select count(b) from RtBookingEntity b where  b.endDate<:start and b.nextSpaceDays>=:days)>0) " +
+//            "       and " +
+//            "       (car.id=book.carId)" +
+//            "   )" +
+//            ")"
+//    )
+    @Query(value = "SELECT * FROM rt_car LEFT JOIN rt_booking ON rt_car.id = rt_booking.car_id WHERE store_id=:id and service_type_id=:type and latest_available_date <=:start OR ( end_date <=:start AND next_space_days >= :days AND rt_booking.status_id NOT IN ( 3, 4 ) ) GROUP BY rt_car.id",nativeQuery = true)
     Page<RtCarEntity> findRtCarEntitiesAvailableMore(@Param("start") Timestamp start, @Param("days") int days, @Param("id") int id, @Param("type") int type, Pageable pageable);
 
     @Query(value = "select book from RtBookingEntity book where book.carId=:id and book.endDate<:start and book.nextSpaceDays>=:days")

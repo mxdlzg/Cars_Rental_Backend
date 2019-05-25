@@ -35,6 +35,8 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
+    RtvOrderRepo rtvOrderRepo;
+    @Autowired
     OrderCustomerRepository orderCustomerRepository;
     @Autowired
     OrderPriceRepository orderPriceRepository;
@@ -64,9 +66,12 @@ public class OrderService {
         for (RtPriceEntity rtPriceEntity : detail) {
             RtOrderPriceEntity orderPriceEntity = new RtOrderPriceEntity();
             orderPriceEntity.setPriceId(rtPriceEntity.getId());
+            orderPriceEntity.setPrice(rtPriceEntity.getPrice());
+            orderPriceEntity.setName(rtPriceEntity.getDescription());
             orderPriceEntity.setNum(rtPriceEntity.getPriceByDay() ? days : 1);
-            orderPriceEntity.setAmount(rtPriceEntity.getPriceByDay() ? rtPriceEntity.getPrice() : days * rtPriceEntity.getPrice());
+            orderPriceEntity.setAmount(rtPriceEntity.getPriceByDay() ? days * rtPriceEntity.getPrice() : rtPriceEntity.getPrice());
             amount += orderPriceEntity.getAmount();
+            realDetail.add(orderPriceEntity);
         }
 
         //time
@@ -89,6 +94,7 @@ public class OrderService {
         bookingEntity.setRentDays(orderEntity.getRentDays());
         bookingEntity.setPreId(preBooking == null ? -1 : preBooking.getId());
         bookingEntity.setNextId(nextBooking == null ? -1 : nextBooking.getId());
+        bookingEntity.setStatusId(1);
         if (preBooking != null) {
             preBooking.setNextId(bookingEntity.getId());
             int preMidDays = Converter.diffDays(preBooking.getEndDate().getTime() * 1000, bookingEntity.getStartDate().getTime() * 1000);
@@ -126,6 +132,10 @@ public class OrderService {
             payOrderEntity.setDescription("订单"+orderEntity.getId()+"--支付系统预订订单");
             payOrderEntity.setOrderId(orderEntity.getId());
             payOrderRepository.save(payOrderEntity);
+
+            //car
+            RtCarEntity carEntity = carRepository.getOne(orderEntity.getCarId());
+            carEntity.setLatestAvailableDate(orderEntity.getEndDate());
 
             return orderEntity;
         } else {
@@ -205,7 +215,8 @@ public class OrderService {
 
     public Page<RtvOrderCarInfoEntity> queryOrderList(String name, int page) {
         RtUserEntity userEntity = userRepository.findByUsername(name);
-        return orderCarInfoRepo.findAllByBelongUserId(userEntity.getId(), PageRequest.of(page, 10));
+        Page<RtvOrderCarInfoEntity> res = orderCarInfoRepo.findAllByBelongUserIdOrderByCreatedDateDesc(userEntity.getId(), PageRequest.of(page, 10));
+        return res;
     }
 
 
@@ -218,9 +229,9 @@ public class OrderService {
      */
     public OrderDetail queryOrderDetail(int userId, int id) {
         OrderDetail orderDetail = null;
-        RtOrderEntity orderEntity = orderRepository.findByBelongUserIdAndId(userId, id);
-        if (orderEntity != null && orderEntity.getValid()) {
-            RtvStateCurrentEntity currentEntity = stateCurrentRepo.findByOrderIdAndStateId(orderEntity.getId(), orderEntity.getCurrentStateId());
+        RtvOrderEntity orderEntity = rtvOrderRepo.findByBelongUserIdAndId(userId, id);
+        if (orderEntity != null) {
+            RtvStateCurrentEntity currentEntity = stateCurrentRepo.findTopByOrderIdAndStateIdOrderByChangedDateDesc(orderEntity.getId(), orderEntity.getCurrentStateId());
             //new result
             orderDetail = new OrderDetail(currentEntity.getCurrent(),currentEntity.getChangedDate());
             //user info
@@ -268,6 +279,32 @@ public class OrderService {
         if (orderEntity.getTypeId() != 2 && orderEntity.getValid()){
             orderEntity.setTypeId(2);
             orderEntity.setValid(false);
+
+            //
+            RtCarEntity carEntity = carRepository.getOne(orderEntity.getCarId());
+
+            //delete booking
+            RtBookingEntity bookingEntity = bookingRepository.getById(orderEntity.getBookingId());
+            bookingEntity.setStatusId(4);
+            bookingEntity.setStartDate(carEntity.getBuyDate());
+            bookingEntity.setEndDate(carEntity.getBuyDate());
+
+            RtBookingEntity pre = bookingRepository.getById(bookingEntity.getPreId());
+            RtBookingEntity next = null;
+            if (bookingEntity.getNextId() != -1){
+                next = bookingRepository.getById(bookingEntity.getNextId());
+                int days = Converter.diffDays(pre.getEndDate().getTime(),next.getStartDate().getTime());
+                pre.setNextSpaceDays(days);
+                bookingEntity.setNextSpaceDays(Converter.diffDays(bookingEntity.getEndDate().getTime(),next.getStartDate().getTime()));
+                pre.setNextId(next.getId());
+                next.setPreId(pre.getId());
+            }else {
+                pre.setNextSpaceDays(1000);
+                bookingEntity.setNextSpaceDays(1000);
+                pre.setNextId(-1);
+            }
+
+
             return new BaseResult(true,"订单已取消");
         }
         return new BaseResult(false,orderEntity.getValid()?"此订单已被取消，请勿重复操作":"无效的订单");

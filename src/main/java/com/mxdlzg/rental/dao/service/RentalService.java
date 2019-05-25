@@ -1,12 +1,10 @@
 package com.mxdlzg.rental.dao.service;
 
-import com.mxdlzg.rental.dao.respository.BaseRepository;
-import com.mxdlzg.rental.dao.respository.CarMakerRepository;
-import com.mxdlzg.rental.dao.respository.CarRepository;
-import com.mxdlzg.rental.dao.respository.CarStructureRepository;
+import com.mxdlzg.rental.dao.respository.*;
 import com.mxdlzg.rental.domain.entity.RtCar;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
 import com.mxdlzg.rental.domain.entity.RtCarStructureEntity;
+import com.mxdlzg.rental.domain.entity.RtvCarEntity;
 import com.mxdlzg.rental.domain.model.FilterParams;
 import com.mxdlzg.rental.domain.model.OptionsCar;
 import com.mxdlzg.rental.domain.model.OptionsKV;
@@ -30,6 +28,8 @@ public class RentalService {
     CarMakerRepository carMakerRepository;
     @Autowired
     CarRepository carRepository;
+    @Autowired
+    RtvCarRepo rtvCarRepo;
 
     /**
      * @return FilterParams
@@ -41,6 +41,7 @@ public class RentalService {
         List<OptionsKV> optionsPrice = new ArrayList<>();
         initOptionsPrice(optionsPrice);
         List<OptionsKV> optionsBrand = carMakerRepository.findAllMakers();
+
         return new FilterParams(optionsCars,structures,optionsPrice,optionsBrand);
     }
     private void initOptionsCar(List<OptionsCar> objects){
@@ -77,7 +78,7 @@ public class RentalService {
         return carRepository.findRtCarEntitiesAvailableMore(startDate,days,start,type,PageRequest.of(page,3));
     }
 
-    public RtCarEntity queryCarDetail(int id){
-        return carRepository.getOne(id);
+    public RtvCarEntity queryCarDetail(int id){
+        return rtvCarRepo.findById(id);
     }
 }

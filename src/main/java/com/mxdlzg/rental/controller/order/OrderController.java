@@ -3,6 +3,7 @@ package com.mxdlzg.rental.controller.order;
 import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
+import com.mxdlzg.rental.domain.entity.RtvCarEntity;
 import com.mxdlzg.rental.domain.entity.RtvOrderCarInfoEntity;
 import com.mxdlzg.rental.domain.model.*;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
@@ -23,9 +24,9 @@ public class OrderController {
 
 
     @GetMapping(value = "/api/car/{carId}")
-    public RestResult<RtCarEntity> queryCarDetail(@PathVariable int carId) {
+    public RestResult<RtvCarEntity> queryCarDetail(@PathVariable int carId) {
         // TODO: 2019/4/30 处理query null 情况
-        return new RestResult<RtCarEntity>(rentalService.queryCarDetail(carId));
+        return new RestResult<RtvCarEntity>(rentalService.queryCarDetail(carId));
     }
 
     @GetMapping("/api/order/queryPrice")
@@ -92,7 +93,8 @@ public class OrderController {
                                   @RequestParam(value = "id")Integer id){
         int userId = JwtTokenUtils.getUserId(token);
 
-        return new RestResult<>(orderService.takeCar(id,userId));
+        BaseResult result = orderService.takeCar(id,userId);
+        return new RestResult<>(result.isSuccess(),"",result.getMsg());
     }
 
     @DeleteMapping("/api/order/cancelOrder")

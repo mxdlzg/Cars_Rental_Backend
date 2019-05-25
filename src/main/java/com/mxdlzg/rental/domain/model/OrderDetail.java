@@ -1,7 +1,9 @@
 package com.mxdlzg.rental.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mxdlzg.rental.domain.entity.RtCustomerEntity;
 import com.mxdlzg.rental.domain.entity.RtOrderEntity;
+import com.mxdlzg.rental.domain.entity.RtvOrderEntity;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
 
 import java.sql.Timestamp;
@@ -13,7 +15,8 @@ public class OrderDetail extends BaseDaoResult {
     private Timestamp operateDate;
     private List<UserInfo> userInfo;
     private Location startLocation, endLocation;
-    private RtOrderEntity rtOrderEntity;
+    @JsonProperty("order")
+    private RtvOrderEntity rtOrderEntity;
 
 
 
@@ -68,11 +71,11 @@ public class OrderDetail extends BaseDaoResult {
         return endLocation;
     }
 
-    public RtOrderEntity getRtOrderEntity() {
+    public RtvOrderEntity getRtOrderEntity() {
         return rtOrderEntity;
     }
 
-    public void setRtOrderEntity(RtOrderEntity rtOrderEntity) {
+    public void setRtOrderEntity(RtvOrderEntity rtOrderEntity) {
         this.rtOrderEntity = rtOrderEntity;
     }
 }

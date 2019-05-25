@@ -13,6 +13,8 @@ public class RtOrderPriceEntity {
     private Integer orderId;
     private Timestamp date;
     private Integer priceId;
+    private String name;
+    private Double price;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -90,5 +92,23 @@ public class RtOrderPriceEntity {
 
     public void setPriceId(Integer priceId) {
         this.priceId = priceId;
+    }
+
+    @Basic
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Basic
+    public double getPrice(){
+        return this.price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -1,12 +1,10 @@
 package com.mxdlzg.rental.dao.service;
 
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.mxdlzg.rental.dao.respository.*;
 import com.mxdlzg.rental.domain.entity.*;
 import com.mxdlzg.rental.domain.model.CheckoutResult;
 import com.mxdlzg.rental.domain.model.OrderPayInfo;
 import com.mxdlzg.rental.domain.model.PayResult;
-import com.mxdlzg.rental.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +31,7 @@ public class PayService {
     @Autowired
     CheckoutRepository checkoutRepository;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public PayResult payment(int id, int userId){
         //info
         OrderPayInfo orderPayInfo = orderService.getOrderPayInfo(id);
@@ -51,14 +49,14 @@ public class PayService {
 
         orderEntity.setTypeId(4);
         orderEntity.setCurrentStateId(2);
-        orderRepository.flush();
+
         //order state
         orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),2,"PaySystem"));
         //order pay
         RtPayOrderEntity payOrderEntity = payOrderRepository.findByOrderId(orderEntity.getId());
         payOrderEntity.setFinished(true);
         payOrderEntity.setPayDate(new Timestamp(new Date().getTime()));
-        payOrderRepository.flush();
+
         //user
         userService.increaseIntegral(userId,5);
         //invoice

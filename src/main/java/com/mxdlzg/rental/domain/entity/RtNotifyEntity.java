@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -31,6 +32,11 @@ public class RtNotifyEntity {
         this.content = content;
         this.href = href;
         this.userId = userId;
+        this.datetime = new Timestamp(new Date().getTime());
+        this.type = "notification";
+        this.cleared = false;
+        this.isRead = false;
+        this.avatar = "https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png";
     }
 
     @Id

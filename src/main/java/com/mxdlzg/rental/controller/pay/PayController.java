@@ -2,6 +2,7 @@ package com.mxdlzg.rental.controller.pay;
 
 import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.PayService;
+import com.mxdlzg.rental.domain.model.CheckoutResult;
 import com.mxdlzg.rental.domain.model.OrderPayInfo;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
@@ -41,7 +42,12 @@ public class PayController {
                                   @RequestParam(value = "id")Integer id){
         int userId = JwtTokenUtils.getUserId(token);
 
-        return new RestResult<>(payService.checkout(id,userId));
+        CheckoutResult checkoutResult = payService.checkout(id,userId);
+        if (checkoutResult.isSuccess()){
+            return new RestResult<>(checkoutResult);
+        }else {
+            return new RestResult<>(checkoutResult.isSuccess(),"",checkoutResult.getMsg());
+        }
     }
 
 }

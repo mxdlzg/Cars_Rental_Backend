@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface OrderCarInfoRepo extends BaseRepository<RtvOrderCarInfoEntity,Integer> {
-    Page<RtvOrderCarInfoEntity> findAllByBelongUserId(int id, Pageable pageable);
+    Page<RtvOrderCarInfoEntity> findAllByBelongUserIdOrderByCreatedDateDesc(int id, Pageable pageable);
 
     @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.storeName,sum (r.totalPrice)) from RtvOrderCarInfoEntity r where r.createdDate>=WEEK(NOW()) group by r.startStoreId")
     List<OptionsKV<Double>> statisticDetailRankingWeek();

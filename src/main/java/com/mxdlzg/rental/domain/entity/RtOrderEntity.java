@@ -1,6 +1,7 @@
 package com.mxdlzg.rental.domain.entity;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -22,8 +23,13 @@ public class RtOrderEntity {
     private Integer startStoreId;
     private Integer endStoreId;
     private Integer typeId;
+    private BigInteger servicePrice;
+    private BigInteger vehiclePrice;
+    private Integer bookingId;
+
     public RtOrderEntity() {
     }
+
     public RtOrderEntity(Integer belongUserId, float totalPrice, Integer rentDays, Timestamp startDate, Timestamp endDate, Integer carId, Integer typeId, Boolean isValid) {
         this.belongUserId = belongUserId;
         this.totalPrice = totalPrice;
@@ -61,6 +67,10 @@ public class RtOrderEntity {
     @Column(name = "total_price", nullable = true, precision = 2)
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {
@@ -106,7 +116,6 @@ public class RtOrderEntity {
     public void setCarId(Integer carId) {
         this.carId = carId;
     }
-
 
     @Basic
     @Column(name = "created_date", nullable = true)
@@ -210,5 +219,35 @@ public class RtOrderEntity {
 
     public void setTypeId(Integer typeId) {
         this.typeId = typeId;
+    }
+
+    @Basic
+    @Column(name = "service_price", nullable = true, precision = 0)
+    public BigInteger getServicePrice() {
+        return servicePrice;
+    }
+
+    public void setServicePrice(BigInteger servicePrice) {
+        this.servicePrice = servicePrice;
+    }
+
+    @Basic
+    @Column(name = "vehicle_price", nullable = true, precision = 0)
+    public BigInteger getVehiclePrice() {
+        return vehiclePrice;
+    }
+
+    public void setVehiclePrice(BigInteger vehiclePrice) {
+        this.vehiclePrice = vehiclePrice;
+    }
+
+    @Basic
+    @Column(name = "booking_id", nullable = true)
+    public Integer getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
     }
 }
