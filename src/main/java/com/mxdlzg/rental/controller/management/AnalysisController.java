@@ -31,8 +31,8 @@ public class AnalysisController {
     }
 
     @GetMapping("/api/analysis/saleType")
-    public RestResult<List<OptionsKV<Long>>> salesType() {
-        return new RestResult<List<OptionsKV<Long>>>(analysisService.querySalesType());
+    public RestResult<List<OptionsXY<Long>>> salesType() {
+        return new RestResult<List<OptionsXY<Long>>>(analysisService.querySalesType());
     }
 
 

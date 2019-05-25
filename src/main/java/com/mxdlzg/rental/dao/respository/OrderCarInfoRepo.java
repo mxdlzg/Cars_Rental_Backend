@@ -2,6 +2,7 @@ package com.mxdlzg.rental.dao.respository;
 
 import com.mxdlzg.rental.domain.entity.RtvOrderCarInfoEntity;
 import com.mxdlzg.rental.domain.model.OptionsKV;
+import com.mxdlzg.rental.domain.model.OptionsXY;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface OrderCarInfoRepo extends BaseRepository<RtvOrderCarInfoEntity,I
     @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.storeName,sum (r.totalPrice)) from RtvOrderCarInfoEntity r where r.createdDate>=:start and r.createdDate<=:end group by r.startStoreId")
     List<OptionsKV<Double>> statisticDetailRankingBetween(@Param("start")Timestamp start, @Param("end")Timestamp end);
 
-    @Query("select new com.mxdlzg.rental.domain.model.OptionsKV(r.brandName,count(r)) from RtvOrderCarInfoEntity r group by r.brandName order by count(r) desc")
-    List<OptionsKV<Long>> querySalesType();
+    @Query("select new com.mxdlzg.rental.domain.model.OptionsXY(r.brandName,count(r)) from RtvOrderCarInfoEntity r group by r.brandName order by count(r) desc")
+    List<OptionsXY<Long>> querySalesType();
 
 }

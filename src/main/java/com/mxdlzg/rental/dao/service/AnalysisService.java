@@ -83,7 +83,7 @@ public class AnalysisService {
         return new SalesCard(sales,storesRanking);
     }
 
-    public List<OptionsKV<Long>> querySalesType() {
+    public List<OptionsXY<Long>> querySalesType() {
         return orderCarInfoRepo.querySalesType();
     }
 
@@ -94,7 +94,7 @@ public class AnalysisService {
         List<StoresSaleRepo.FinishedSaleResult> finishedSale = storesSaleRepo.finishedSale();
         for (int i = 0; i < totalSale.size(); i++) {
             storeData.add(new OptionsKV<Float>(totalSale.get(i).getFirst()+"("+finishedSale.get(i).getId()+")",
-                    (float) (finishedSale.get(i).getAmount()/totalSale.get(i).getSecond())));
+                    ((float) (finishedSale.get(i).getAmount()))/totalSale.get(i).getSecond()));
         }
         totalSale.clear();
         finishedSale.clear();
