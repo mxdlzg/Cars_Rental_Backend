@@ -38,6 +38,8 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtCurrentUserEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvCarEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvOrderEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvLfmIndexCarEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtvStrategyEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
