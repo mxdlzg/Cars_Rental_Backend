@@ -18,6 +18,6 @@ public class AssetsService {
 
     public Page<RtvUserCouponsEntity> queryCouponsList(String name, int page) {
         RtUserEntity userEntity = userRepository.findByUsername(name);
-        return userCouponsRepo.findAllByUserId(userEntity.getId(), PageRequest.of(page,10));
+        return userCouponsRepo.findAllByUserIdOrderByEndDateDesc(userEntity.getId(), PageRequest.of(page,10));
     }
 }

@@ -1,6 +1,7 @@
 package com.mxdlzg.rental.domain.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -15,8 +16,9 @@ public class RtvUserCouponsEntity {
     private Boolean precondition;
     private BigDecimal preconditionPrice;
     private Boolean isSuperposition;
-    private int id;
     private Integer userId;
+    private Integer couponId;
+    private Double price;
 
     @Basic
     @Column(name = "name", nullable = true, length = 255)
@@ -88,16 +90,6 @@ public class RtvUserCouponsEntity {
         isSuperposition = superposition;
     }
 
-    @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Basic
     @Column(name = "user_id", nullable = true)
     public Integer getUserId() {
@@ -113,19 +105,39 @@ public class RtvUserCouponsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RtvUserCouponsEntity that = (RtvUserCouponsEntity) o;
-        return id == that.id &&
-                Objects.equals(name, that.name) &&
+        return  Objects.equals(name, that.name) &&
                 Objects.equals(createDate, that.createDate) &&
                 Objects.equals(endDate, that.endDate) &&
                 Objects.equals(minCreditType, that.minCreditType) &&
                 Objects.equals(precondition, that.precondition) &&
                 Objects.equals(preconditionPrice, that.preconditionPrice) &&
                 Objects.equals(isSuperposition, that.isSuperposition) &&
-                Objects.equals(userId, that.userId);
+                Objects.equals(userId, that.userId)&&
+                Objects.equals(couponId,that.couponId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, createDate, endDate, minCreditType, precondition, preconditionPrice, isSuperposition, id, userId);
+        return Objects.hash(name, createDate, endDate, minCreditType, precondition, preconditionPrice, isSuperposition, couponId, userId);
+    }
+
+    @Id
+    @Column(name = "coupon_id", nullable = true)
+    public Integer getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(Integer couponId) {
+        this.couponId = couponId;
+    }
+
+    @Basic
+    @Column(name = "price", nullable = true, precision = 2)
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

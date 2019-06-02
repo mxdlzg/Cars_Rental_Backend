@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserCouponsRepo extends BaseRepository<RtvUserCouponsEntity,Integer> {
-    Page<RtvUserCouponsEntity> findAllByUserId(int id, Pageable pageable);
+    Page<RtvUserCouponsEntity> findAllByUserIdOrderByEndDateDesc(int id, Pageable pageable);
 }

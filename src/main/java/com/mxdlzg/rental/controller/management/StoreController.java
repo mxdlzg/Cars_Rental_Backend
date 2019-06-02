@@ -1,6 +1,7 @@
 package com.mxdlzg.rental.controller.management;
 
 import com.mxdlzg.rental.dao.respository.RtvCarRepo;
+import com.mxdlzg.rental.dao.respository.StoreRepository;
 import com.mxdlzg.rental.dao.service.CarService;
 import com.mxdlzg.rental.domain.entity.RtvCarEntity;
 import com.mxdlzg.rental.domain.model.AddCarForm;
@@ -22,6 +23,8 @@ public class StoreController {
     RtvCarRepo rtvCarRepo;
     @Autowired
     CarService carService;
+    @Autowired
+    StoreRepository storeRepository;
 
     @GetMapping("/api/assets/storeCarList")
     public RestResult<List<RtvCarEntity>> carList(@RequestHeader("Authorization") String token,
@@ -74,5 +77,11 @@ public class StoreController {
         return new RestResult<>(false, ResponseEnums.INVALID_USER);
     }
 
+    @GetMapping("/api/assets/storeRanking")
+    public RestResult<?> storeRanking(@RequestHeader("Authorization") String token,
+                                      @RequestParam("storeId")int id){
+        List<Long> data = storeRepository.fetchRanking(id);
+        return new RestResult<>(data);
+    }
 
 }
