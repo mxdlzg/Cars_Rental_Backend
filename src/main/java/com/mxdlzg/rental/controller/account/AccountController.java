@@ -4,6 +4,7 @@ import com.mxdlzg.rental.controller.BaseController;
 import com.mxdlzg.rental.dao.service.UserService;
 import com.mxdlzg.rental.domain.entity.RtCurrentUserEntity;
 import com.mxdlzg.rental.domain.entity.RtUserEntity;
+import com.mxdlzg.rental.domain.entity.RtvUserStoreEntity;
 import com.mxdlzg.rental.domain.model.JwtUser;
 import com.mxdlzg.rental.domain.model.LoginResult;
 import com.mxdlzg.rental.domain.model.OrderSubmitForm;
@@ -18,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,4 +72,9 @@ public class AccountController extends BaseController {
         return restResult;
     }
 
+    @GetMapping("/api/currentUser/permissions")
+    public RestResult<List<RtvUserStoreEntity>> queryUserMI(@RequestHeader("Authorization") String token){
+        int userId = JwtTokenUtils.getUserId(token);
+        return new RestResult<>(userService.queryUserMI(userId));
+    }
 }

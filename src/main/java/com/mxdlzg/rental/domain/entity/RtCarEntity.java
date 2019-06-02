@@ -29,8 +29,26 @@ public class RtCarEntity {
     private Timestamp latestAvailableDate;
     private Integer serviceTypeId;
 
+    public RtCarEntity() {
+    }
+
+    public RtCarEntity(boolean bookAble, Timestamp buyDate, double defaultRentPrice, Timestamp manufactureDate, boolean rentAble, Integer typeId, String description, String brandName, String typeName, Integer storeId, Integer serviceTypeId) {
+        this.bookAble = bookAble;
+        this.buyDate = buyDate;
+        this.defaultRentPrice = defaultRentPrice;
+        this.manufactureDate = manufactureDate;
+        this.rentAble = rentAble;
+        this.typeId = typeId;
+        this.description = description;
+        this.brandName = brandName;
+        this.typeName = typeName;
+        this.storeId = storeId;
+        this.serviceTypeId = serviceTypeId;
+    }
+
     @Id
     @Column(name = "id")
+    @GeneratedValue
     public int getId() {
         return id;
     }

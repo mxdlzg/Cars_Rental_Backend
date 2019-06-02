@@ -39,7 +39,8 @@ public enum ResponseEnums {
     LOGIN_INVALID_OR_EXPIRED("031","登录无效或登录已过期"),
     ORDER_HAS_PAID("032","订单已支付"),
     INVALID_ORDER("033","无效的订单"),
-    JWT_MALFORMED_TOKEN("034","用户认证信息设置错误，请尝试重新登录系统");
+    JWT_MALFORMED_TOKEN("034","用户认证信息设置错误，请尝试重新登录系统"),
+    INSERT_SUCCESS("035","添加成功");
 
     private String code;
     private String msg;
