@@ -3,6 +3,7 @@ package com.mxdlzg.rental.controller.order;
 import com.mxdlzg.rental.dao.service.OrderService;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
+import com.mxdlzg.rental.domain.entity.RtOrderCommentsEntity;
 import com.mxdlzg.rental.domain.entity.RtvCarEntity;
 import com.mxdlzg.rental.domain.entity.RtvOrderCarInfoEntity;
 import com.mxdlzg.rental.domain.model.*;
@@ -103,5 +104,30 @@ public class OrderController {
         int userId = JwtTokenUtils.getUserId(token);
 
         return new RestResult<>(orderService.cancelOrder(id,userId));
+    }
+
+    @PutMapping("/api/order/comments")
+    public RestResult<?> comments(@RequestHeader("Authorization") String token,
+                                  @Validated
+                                  @RequestBody CommentsMdl body,
+                                  BindingResult validatorResult){
+        int userId= JwtTokenUtils.getUserId(token);
+        if (!validatorResult.hasErrors()){
+            boolean success = orderService.updateOrderComments(body,userId);
+            if (success){
+                return new RestResult<>();
+            }
+        }else {
+            new RestResult<>(false,ResponseEnums.PARAMS_ERROR);
+        }
+        return new RestResult<>(false,ResponseEnums.DATABASE_ERROR);
+    }
+
+    @GetMapping("/api/order/fetchComments")
+    public RestResult<?> fetchComments(@RequestHeader("Authorization") String token,
+                                  @RequestParam("id")int id){
+        int userId= JwtTokenUtils.getUserId(token);
+        RtOrderCommentsEntity orderCommentsEntity = orderService.getOrderComments(id,userId);
+        return new RestResult<>(orderCommentsEntity);
     }
 }

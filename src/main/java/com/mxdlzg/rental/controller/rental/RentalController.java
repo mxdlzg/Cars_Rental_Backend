@@ -3,6 +3,7 @@ package com.mxdlzg.rental.controller.rental;
 import com.mxdlzg.rental.dao.service.RentalService;
 import com.mxdlzg.rental.dao.service.StoreService;
 import com.mxdlzg.rental.domain.entity.RtCarEntity;
+import com.mxdlzg.rental.domain.entity.RtvCarEntity;
 import com.mxdlzg.rental.domain.model.FilterParams;
 import com.mxdlzg.rental.domain.model.RestResult;
 import com.mxdlzg.rental.domain.model.enums.ResponseEnums;
@@ -48,7 +49,7 @@ public class RentalController {
                                    @RequestParam(value = "type",defaultValue = "1")int type,
                                    @RequestParam(value = "more",required = false,defaultValue = "false")boolean isMore,
                                    @RequestParam(value = "page",required = false,defaultValue = "0")int page){
-        Page<RtCarEntity> carEntities;
+        Page<RtvCarEntity> carEntities;
         if (!isMore){
             carEntities = rentalService.findCars(start,end,d1,d2,type);
         }else {

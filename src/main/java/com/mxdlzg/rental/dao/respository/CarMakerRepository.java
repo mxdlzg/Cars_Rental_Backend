@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CarMakerRepository extends BaseRepository<RtCarMakerEntity,Long> {
 
-    @Query(value = "select new com.mxdlzg.rental.domain.model.OptionsKV(u.maker,u.id) " +
+    @Query(value = "select new com.mxdlzg.rental.domain.model.OptionsKV(u.maker,u.maker) " +
             "from RtCarMakerEntity u")
     public List<OptionsKV> findAllMakers();
 }

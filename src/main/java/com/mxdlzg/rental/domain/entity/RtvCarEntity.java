@@ -35,6 +35,39 @@ public class RtvCarEntity {
     private String brand;
     private String type;
 
+    public RtvCarEntity() {
+    }
+
+    public RtvCarEntity(int id, boolean bookAble, Timestamp buyDate, String carcaseId, double defaultRentPrice, String engineId, Integer insuranceId, Timestamp manufactureDate, boolean rentAble, Integer typeId, String description, String brandName, Integer fuelId, String typeName, Integer storeId, Integer capability, Timestamp latestAvailableDate, Integer serviceTypeId, String maker, String structure, String color, Integer passengerNum, String imageSrc, String introduce, String label, String brand, String type) {
+        this.id = id;
+        this.bookAble = bookAble;
+        this.buyDate = buyDate;
+        this.carcaseId = carcaseId;
+        this.defaultRentPrice = defaultRentPrice;
+        this.engineId = engineId;
+        this.insuranceId = insuranceId;
+        this.manufactureDate = manufactureDate;
+        this.rentAble = rentAble;
+        this.typeId = typeId;
+        this.description = description;
+        this.brandName = brandName;
+        this.fuelId = fuelId;
+        this.typeName = typeName;
+        this.storeId = storeId;
+        this.capability = capability;
+        this.latestAvailableDate = latestAvailableDate;
+        this.serviceTypeId = serviceTypeId;
+        this.maker = maker;
+        this.structure = structure;
+        this.color = color;
+        this.passengerNum = passengerNum;
+        this.imageSrc = imageSrc;
+        this.introduce = introduce;
+        this.label = label;
+        this.brand = brand;
+        this.type = type;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingRepository extends BaseRepository<RtBookingEntity,Integer> {
     boolean existsByCarId(int carId);
-    RtBookingEntity getById(int id);
+    RtBookingEntity getByBkId(int id);
 }

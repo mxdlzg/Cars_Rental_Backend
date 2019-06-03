@@ -33,6 +33,12 @@ public class RestResult<T> {
     private Timestamp currentTime;
 
     public RestResult() {
+        this.status = "ok";
+        this.success = true;
+        this.code = ResponseEnums.SUCCESS_OPTION.getCode();
+        this.msg = ResponseEnums.SUCCESS_OPTION.getMsg();
+        this.data = null;
+        this.currentTime = new Timestamp(new Date().getTime());
     }
 
     public RestResult(boolean success, ResponseEnums enums) {

@@ -8,9 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "rt_booking", schema = "rental", catalog = "")
 public class RtBookingEntity {
-    @Id
-    @GeneratedValue
-    private int id;
+
     private Integer belongUserId;
     private Integer rentDays;
     private Timestamp startDate;
@@ -21,17 +19,9 @@ public class RtBookingEntity {
     private Integer preId;
     private Integer nextId;
     private Integer statusId;
-
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int bkId;
 
     @Basic
     @Column(name = "belong_user_id", nullable = true)
@@ -98,7 +88,7 @@ public class RtBookingEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RtBookingEntity that = (RtBookingEntity) o;
-        return id == that.id &&
+        return bkId == that.bkId &&
                 Objects.equals(belongUserId, that.belongUserId) &&
                 Objects.equals(rentDays, that.rentDays) &&
                 Objects.equals(startDate, that.startDate) &&
@@ -109,7 +99,7 @@ public class RtBookingEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, belongUserId, rentDays, startDate, endDate, carId, bookingPrice);
+        return Objects.hash(bkId, belongUserId, rentDays, startDate, endDate, carId, bookingPrice);
     }
 
     @Basic
@@ -150,5 +140,16 @@ public class RtBookingEntity {
 
     public void setStatusId(Integer statusId) {
         this.statusId = statusId;
+    }
+
+    @Id
+    @GeneratedValue
+    @Column(name = "bk_id", nullable = false)
+    public int getBkId() {
+        return bkId;
+    }
+
+    public void setBkId(int bkId) {
+        this.bkId = bkId;
     }
 }

@@ -30,6 +30,8 @@ public class PayService {
     UserService userService;
     @Autowired
     CheckoutRepository checkoutRepository;
+    @Autowired
+    OrderCommentsRepository orderCommentsRepository;
 
     @Transactional
     public PayResult payment(int id, int userId){
@@ -95,6 +97,9 @@ public class PayService {
 
         //checkout
         checkoutRepository.save(new RtCheckoutEntity(orderEntity.getId(),orderEntity.getTotalPrice(),new Timestamp(new Date().getTime()),invoiceEntity.getId()));
+
+        //default evaluation
+        orderCommentsRepository.save(new RtOrderCommentsEntity(orderEntity.getId(),userId,"默认评论！",0));
 
         //notify
         notifyRepository.save(new RtNotifyEntity("订单结算成功",

@@ -46,6 +46,8 @@ public class OrderService {
     PayOrderRepository payOrderRepository;
     @Autowired
     NotifyRepository notifyRepository;
+    @Autowired
+    OrderCommentsRepository orderCommentsRepository;
 
     //view
     @Autowired
@@ -92,16 +94,16 @@ public class OrderService {
         bookingEntity.setStartDate(orderEntity.getStartDate());
         bookingEntity.setEndDate(orderEntity.getEndDate());
         bookingEntity.setRentDays(orderEntity.getRentDays());
-        bookingEntity.setPreId(preBooking == null ? -1 : preBooking.getId());
-        bookingEntity.setNextId(nextBooking == null ? -1 : nextBooking.getId());
+        bookingEntity.setPreId(preBooking == null ? -1 : preBooking.getBkId());
+        bookingEntity.setNextId(nextBooking == null ? -1 : nextBooking.getBkId());
         bookingEntity.setStatusId(1);
         if (preBooking != null) {
-            preBooking.setNextId(bookingEntity.getId());
+            preBooking.setNextId(bookingEntity.getBkId());
             int preMidDays = Converter.diffDays(preBooking.getEndDate().getTime() * 1000, bookingEntity.getStartDate().getTime() * 1000);
             preBooking.setNextSpaceDays(preBooking.getNextSpaceDays() - preMidDays);
         }
         if (nextBooking != null) {
-            nextBooking.setPreId(bookingEntity.getId());
+            nextBooking.setPreId(bookingEntity.getBkId());
             int midNextDays = Converter.diffDays(bookingEntity.getEndDate().getTime() * 1000, nextBooking.getStartDate().getTime() * 1000);
             bookingEntity.setNextSpaceDays(midNextDays);
         }
@@ -284,20 +286,20 @@ public class OrderService {
             RtCarEntity carEntity = carRepository.getOne(orderEntity.getCarId());
 
             //delete booking
-            RtBookingEntity bookingEntity = bookingRepository.getById(orderEntity.getBookingId());
+            RtBookingEntity bookingEntity = bookingRepository.getByBkId(orderEntity.getBookingId());
             bookingEntity.setStatusId(4);
             bookingEntity.setStartDate(carEntity.getBuyDate());
             bookingEntity.setEndDate(carEntity.getBuyDate());
 
-            RtBookingEntity pre = bookingRepository.getById(bookingEntity.getPreId());
+            RtBookingEntity pre = bookingRepository.getByBkId(bookingEntity.getPreId());
             RtBookingEntity next = null;
             if (bookingEntity.getNextId() != -1){
-                next = bookingRepository.getById(bookingEntity.getNextId());
+                next = bookingRepository.getByBkId(bookingEntity.getNextId());
                 int days = Converter.diffDays(pre.getEndDate().getTime(),next.getStartDate().getTime());
                 pre.setNextSpaceDays(days);
                 bookingEntity.setNextSpaceDays(Converter.diffDays(bookingEntity.getEndDate().getTime(),next.getStartDate().getTime()));
-                pre.setNextId(next.getId());
-                next.setPreId(pre.getId());
+                pre.setNextId(next.getBkId());
+                next.setPreId(pre.getBkId());
             }else {
                 pre.setNextSpaceDays(1000);
                 bookingEntity.setNextSpaceDays(1000);
@@ -308,5 +310,21 @@ public class OrderService {
             return new BaseResult(true,"订单已取消");
         }
         return new BaseResult(false,orderEntity.getValid()?"此订单已被取消，请勿重复操作":"无效的订单");
+    }
+
+    @Transactional
+    public boolean updateOrderComments(CommentsMdl body, int userId) {
+        RtOrderEntity orderEntity = orderRepository.findByBelongUserIdAndId(userId,Integer.valueOf(body.getOrder()));
+        if (orderEntity !=null && orderEntity.getId()>0){
+            RtOrderCommentsEntity orderCommentsEntity = orderCommentsRepository.findByUserIdAndOrderId(userId,orderEntity.getId());
+            orderCommentsEntity.setContent(body.getContent());
+            orderCommentsEntity.setRate(body.getRate());
+            return true;
+        }
+        return false;
+    }
+
+    public RtOrderCommentsEntity getOrderComments(int id, int userId) {
+        return orderCommentsRepository.findByUserIdAndOrderId(userId,id);
     }
 }

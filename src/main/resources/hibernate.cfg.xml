@@ -41,6 +41,7 @@
         <mapping class="com.mxdlzg.rental.domain.entity.RtvLfmIndexCarEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvStrategyEntity"/>
         <mapping class="com.mxdlzg.rental.domain.entity.RtvUserStoreEntity"/>
+        <mapping class="com.mxdlzg.rental.domain.entity.RtOrderCommentsEntity"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
