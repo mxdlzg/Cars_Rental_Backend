@@ -20,6 +20,11 @@ public class RtUserEntity {
     private String username;
     private String role;
     private Integer integral;
+    private Integer creditId;
+    private String avatar;
+    private String status;
+    private String signature;
+    private String title;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -129,5 +134,55 @@ public class RtUserEntity {
 
     public void setIntegral(Integer integral) {
         this.integral = integral;
+    }
+
+    @Basic
+    @Column(name = "credit_id", nullable = true)
+    public Integer getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(Integer creditId) {
+        this.creditId = creditId;
+    }
+
+    @Basic
+    @Column(name = "avatar", nullable = true, length = 255)
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    @Basic
+    @Column(name = "status", nullable = true, length = 255)
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Basic
+    @Column(name = "signature", nullable = true, length = 255)
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    @Basic
+    @Column(name = "title", nullable = true, length = 255)
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

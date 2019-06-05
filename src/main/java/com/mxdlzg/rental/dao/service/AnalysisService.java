@@ -110,11 +110,11 @@ public class AnalysisService {
         return rsList;
     }
 
-    public List<RtCarEntity> queryRecommendation(Long userId) {
+    public List<RtCarEntity> queryRecommendation(int userId) {
         //comm
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8001/api/recommend";
-        HttpEntity<LocalRequest> entity = new HttpEntity<>(new LocalRequest("lfm",15));
+        HttpEntity<LocalRequest> entity = new HttpEntity<>(new LocalRequest("lfm",userId));
         LocalResponse response = restTemplate.exchange(url, HttpMethod.POST,entity,LocalResponse.class).getBody();
 
         //check

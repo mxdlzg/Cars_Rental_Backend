@@ -32,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private final String ADMIN = "ADMIN";
+    private final String USER = "USER";
+
     //加密
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -49,10 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                // TODO: 2019/3/3 task测试界面
-                .antMatchers("/tasks").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/tasks/**").hasRole("ADMIN")
-                //.antMatchers(HttpMethod.DELETE,"/tasks/**").hasRole("ADMIN")
+//                .antMatchers("/tasks").authenticated()
+                .antMatchers("/api/analysis/**").hasRole(ADMIN)
+                .antMatchers("/api/pay/checkout").hasRole(ADMIN)
+                .antMatchers("/api/pay/payment").hasRole(USER)
+                .antMatchers("/api/order/takeCar").hasRole(ADMIN)
+                .antMatchers("/api/order/orderDetail").hasAnyRole(USER,ADMIN)
+                .antMatchers("/api/order/**").hasAnyRole(USER)
+                .antMatchers("/api/assets/queryCouponsList").hasRole(USER)
+                .antMatchers("/api/assets/**").hasAnyRole(ADMIN)
                 .anyRequest().permitAll()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

@@ -110,6 +110,8 @@ public class OrderService {
         bookingEntity = bookingRepository.save(bookingEntity);
         bookingRepository.flush();  //update end
 
+        orderEntity.setBookingId(bookingEntity.getBkId());
+
         //main order
         orderEntity = orderRepository.save(orderEntity);
 
@@ -231,7 +233,13 @@ public class OrderService {
      */
     public OrderDetail queryOrderDetail(int userId, int id) {
         OrderDetail orderDetail = null;
-        RtvOrderEntity orderEntity = rtvOrderRepo.findByBelongUserIdAndId(userId, id);
+        RtvOrderEntity orderEntity = null;
+        RtUserEntity userEntity = userRepository.findById(userId);
+        if (userEntity.getRole().equals("ROLE_ADMIN")){
+            orderEntity = rtvOrderRepo.findById(id);
+        }else {
+            orderEntity = rtvOrderRepo.findByBelongUserIdAndId(userId, id);
+        }
         if (orderEntity != null) {
             RtvStateCurrentEntity currentEntity = stateCurrentRepo.findTopByOrderIdAndStateIdOrderByChangedDateDesc(orderEntity.getId(), orderEntity.getCurrentStateId());
             //new result
@@ -258,8 +266,9 @@ public class OrderService {
     }
 
     @Transactional
-    public BaseResult takeCar(Integer id, int userId) {
+    public BaseResult takeCar(Integer id, int adminId) {
         RtOrderEntity orderEntity = orderRepository.getOne(id);
+        int userId = orderEntity.getBelongUserId();
         if (orderEntity.getCurrentStateId() !=3 && orderEntity.getValid()){
             RtOrderStateEntity orderStateEntity = orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),3,"PaySystem"));
             orderEntity.setCurrentStateId(3);
@@ -301,12 +310,16 @@ public class OrderService {
                 pre.setNextId(next.getBkId());
                 next.setPreId(pre.getBkId());
             }else {
-                pre.setNextSpaceDays(1000);
+                if (pre != null){
+                    pre.setNextSpaceDays(1000);
+                    pre.setNextId(-1);
+                }
                 bookingEntity.setNextSpaceDays(1000);
-                pre.setNextId(-1);
             }
-
-
+            notifyRepository.save(new RtNotifyEntity("订单取消",
+                    "订单"+orderEntity.getId()+"已被取消，若订单已支付，订金将原路返还支付账户！",
+                    "/order/OrderDetail?id="+orderEntity.getId(),
+                    userId));
             return new BaseResult(true,"订单已取消");
         }
         return new BaseResult(false,orderEntity.getValid()?"此订单已被取消，请勿重复操作":"无效的订单");

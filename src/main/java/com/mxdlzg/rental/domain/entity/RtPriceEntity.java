@@ -12,8 +12,19 @@ public class RtPriceEntity {
     private double price;
     private Boolean priceByDay;
 
+    public RtPriceEntity() {
+    }
+
+    public RtPriceEntity(Integer carId, String description, double price, Boolean priceByDay) {
+        this.carId = carId;
+        this.description = description;
+        this.price = price;
+        this.priceByDay = priceByDay;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     public int getId() {
         return id;
     }

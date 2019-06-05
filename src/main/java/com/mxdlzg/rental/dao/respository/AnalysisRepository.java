@@ -15,7 +15,7 @@ public interface AnalysisRepository extends BaseRepository<RtvAnalysisDaySaleEnt
     @Query("select rv from RtvAnalysisDaySaleEntity rv where rv.dayTime>=CURDATE()")
     RtvAnalysisDaySaleEntity findTopByDayTime();
 
-    @Query("select new com.mxdlzg.rental.domain.model.AnalysisOverview(sum(rv.dayTotal),sum(rv.dayPaidCount)) from RtvAnalysisDaySaleEntity rv")
+    @Query("select new com.mxdlzg.rental.domain.model.AnalysisOverview(COALESCE(sum(rv.dayTotal),0),COALESCE(sum(rv.dayPaidCount),0)) from RtvAnalysisDaySaleEntity rv")
     AnalysisOverview statisticTotal();
 
     List<RtvAnalysisDaySaleEntity> findTop14ByOrderByDayTime();

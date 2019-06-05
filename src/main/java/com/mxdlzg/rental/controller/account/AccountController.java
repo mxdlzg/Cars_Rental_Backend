@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +31,18 @@ public class AccountController extends BaseController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/api/register")
+    @Transactional
     public ResponseEntity<RestResult> register(@RequestBody Map<String,String> rUser){
         RtUserEntity userBean = new RtUserEntity();
-        userBean.setUsername(rUser.getOrDefault("email",""));
+        userBean.setUsername(rUser.getOrDefault("mail",""));
         RestResult restResult;
-        if (!userService.isExist(userBean.getUsername())){
+        if (!userService.isExist(userBean.getUsername()) && !userBean.getUsername().equals("")){
             userBean.setPassword(bCryptPasswordEncoder.encode(rUser.get("password")));
             userBean.setRole(RtUserEntity.ROLE_USER);
+            userBean.setAvatar("https://image01.oneplus.cn/user/201707/09/192/bc4092498dd6db5acbee464189ea8e4f.jpg");
+            userBean.setStatus("valid");
+            userBean.setSignature("萌新用户，请多关照");
+            userBean.setTitle("普通用户");
             userBean.setPhone(rUser.getOrDefault("mobile",""));
             //Check user info
             ResponseEnums state = userService.verify(userBean);

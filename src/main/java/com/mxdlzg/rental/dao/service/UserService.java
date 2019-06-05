@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void increaseIntegral(int userId, int integral) {
         RtUserEntity userEntity = userRepository.findById(userId);
-        userEntity.setIntegral(userEntity.getIntegral()+integral);
+        userEntity.setIntegral(userEntity.getIntegral()==null?integral:userEntity.getIntegral()+integral);
         //userRepository.save(userEntity);
     }
 

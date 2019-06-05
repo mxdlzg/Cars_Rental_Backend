@@ -47,7 +47,7 @@ public class AnalysisController {
     }
 
     @GetMapping("/api/recommendation/{userId}")
-    public RestResult<?> recommendation(@PathVariable Long userId){
+    public RestResult<?> recommendation(@PathVariable int userId){
         return new RestResult<>(analysisService.queryRecommendation(userId));
     }
 }

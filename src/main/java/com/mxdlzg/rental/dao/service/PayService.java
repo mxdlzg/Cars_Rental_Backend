@@ -75,7 +75,8 @@ public class PayService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public CheckoutResult checkout(Integer id, int userId) {
+    public CheckoutResult checkout(Integer id, int adminId) {
+
         //order
         RtOrderEntity orderEntity = orderRepository.getOne(id);
         if (orderEntity.getTypeId() == 3){
@@ -89,6 +90,7 @@ public class PayService {
 
         orderStateRepository.save(new RtOrderStateEntity(orderEntity.getId(),4,"PaySystem"));
 
+        int userId = orderEntity.getBelongUserId();
         //user
         userService.increaseIntegral(userId,5);
 
